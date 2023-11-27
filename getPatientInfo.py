@@ -1,11 +1,27 @@
+import requests as req
+
 def getPatientInfo(patientInfo):
     patientInfo.update({'Name':input("Enter your name: ")})
-    patientInfo.update({'Age':int(input("Enter your age: "))})
+    age="a"
+    while age=="a":
+        try:
+            age = int(input("Enter your age: "))
+            patientInfo.update({'Age':age})
+        except Exception:
+            print("\nENTER ONLY INTEGERS!\n")
     allergy = "a"
     while allergy!="":
         if patientInfo.get('Allergies') == None:
             allergy= input("Enter substances you are allergic to: ").lower()
             if allergy !="":
+                str = "https://rxnav.nlm.nih.gov/REST/spellingsuggestions.json?name=" + allergy
+                data =req.get(str).json()
+                if (len(data['suggestionGroup']['suggestionList']) == 1):
+                    allergy = data['suggestionGroup']['suggestionList']['suggestion'][0]
+                else:
+                    print("\nSUBSTANCE NOT FOUND!\n")
+                    allergy="N/A"
+            if allergy !="" and allergy!="N/A":
                 patientInfo.update({'Allergies':[allergy]})
         else:
             allergy= input("Enter substances you are allergic to: ").lower()

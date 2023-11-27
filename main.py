@@ -45,7 +45,7 @@ while(True):
             print("\nInsert drugs first!")
     elif choice == 5:
         if(len(druglist)!=0):
-            print("-----DELETE A DRUG-----\n")
+            print("-----DELETE A DRUG-----")
             showDrugList(druglist)
             try:
                 drugfordelete = int(input("Delete line number  "))-1
