@@ -5,7 +5,8 @@ def menu():
     print("3. Check for drugs interactions")
     print("4. Drug info")
     print("5. Delete a drug")
-    print("6. Quit\n")
+    print("6. Patient information")
+    print("7. Quit\n")
     
 
 def showDrugList(druglist):

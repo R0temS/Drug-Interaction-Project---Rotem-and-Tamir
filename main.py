@@ -4,8 +4,12 @@ from getInfofun import *
 from searchDrugfun import *
 from drugInteractionfun import *
 from menu import *
+from getPatientInfo import *
 
 druglist = []
+patientInfo={}
+if len(patientInfo)==0:
+    getPatientInfo(patientInfo)
 while(True): 
     menu()
     try:
@@ -17,7 +21,6 @@ while(True):
     if choice == 1:
         searchDrug(druglist)
     elif choice == 2:
-        
         showDrugList(druglist)
     elif choice == 3:
         if(len(druglist)!=0):
@@ -55,7 +58,19 @@ while(True):
                 print("Choice out of range")
         else:
             print("\nInsert drugs first!")
-    elif choice==6:
+    elif choice == 6:
+        try:
+            innerchoice = int(input("1. Enter info\n2. Show info\n"))
+        except Exception:
+            print("Only a number!")
+            continue
+        if innerchoice == 1:
+            getPatientInfo(patientInfo)
+        elif innerchoice == 2:
+            showPatientInfo(patientInfo)
+        
+
+    elif choice==7:
         print("BYE!")
         break
 
