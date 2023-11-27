@@ -21,6 +21,7 @@ while(True):
     os.system('cls')
     if choice == 1:
         searchDrug(druglist)
+        updatedrugsinfodic(drugsInfoDic, druglist)
     elif choice == 2:
         showDrugList(druglist)
     elif choice == 3:

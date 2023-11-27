@@ -43,7 +43,8 @@ def searchDrug(alldrugs):
                         print("Only a number!")
                         continue
                     if(choice>=0 and choice<= count-1):
-                        alldrugs.append([i['conceptProperties'][choice]['name'],i['conceptProperties'][choice]['rxcui']])
+                        if checkforduplicate(i['conceptProperties'][choice]['rxcui'], alldrugs) == False:
+                            alldrugs.append([i['conceptProperties'][choice]['name'],i['conceptProperties'][choice]['rxcui']])
                     else:
                         print("Choice out of range")
                     os.system('cls')
@@ -53,4 +54,10 @@ def searchDrug(alldrugs):
         else:
             print("NO DATA FOUND!")
     return alldrugs
+
+def checkforduplicate(rxcui, druglist):
+    for drug in druglist:
+        if rxcui == drug[1]:
+            return True
+    return False
 

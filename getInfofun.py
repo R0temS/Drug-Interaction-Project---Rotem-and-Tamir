@@ -41,4 +41,9 @@ def getInfo(drug_rxcui, mode, drugsinfodic):
             except Exception:
                 drugsinfodic['druginfo'].update({"DOSAGE AND ADMINISTRATION": "N/A"})
     else:
-        print(f"Error: {response.status_code}")
+        print(f"NO INFO FOUND")
+
+
+def updatedrugsinfodic(drugsinfodic, druglist):
+    for drug in druglist:
+        getInfo(drug[1],"r",drugsinfodic)
