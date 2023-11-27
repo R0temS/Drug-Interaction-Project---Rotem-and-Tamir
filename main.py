@@ -17,9 +17,11 @@ while(True):
     if choice == 1:
         searchDrug(druglist)
     elif choice == 2:
+        print("-----DRUG LIST-----\n")
         showDrugList(druglist)
     elif choice == 3:
         if(len(druglist)!=0):
+            print("-----DRUGS INTERACTIONS-----\n")
             drugInteraction(druglist)
         else:
             print("\nInsert drugs first!")
@@ -32,6 +34,7 @@ while(True):
                 print("Only a number!")
                 continue
             if(drugforinfo>=0 and drugforinfo<= len(druglist)):
+                print("-----DRUG INFO-----\n")
                 getInfo(druglist[drugforinfo][1])
             else:
                 print("Choice out of range")
@@ -39,7 +42,7 @@ while(True):
             print("\nInsert drugs first!")
     elif choice == 5:
         if(len(druglist)!=0):
-            print("Delete line\n")
+            print("-----DELETE A DRUG-----\n")
             showDrugList(druglist)
             try:
                 drugfordelete = int(input("Delete line number  "))-1
