@@ -6,7 +6,6 @@ def menu():
     print("4. Drug info")
     print("5. Delete a drug")
     print("6. Quit\n")
-    print("6. NEW\n")
     
 
 def showDrugList(druglist):
