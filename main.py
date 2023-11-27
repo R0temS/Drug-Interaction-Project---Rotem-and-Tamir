@@ -17,7 +17,7 @@ while(True):
     if choice == 1:
         searchDrug(druglist)
     elif choice == 2:
-        print("-----DRUG LIST-----\n")
+        
         showDrugList(druglist)
     elif choice == 3:
         if(len(druglist)!=0):
