@@ -7,6 +7,7 @@ from menu import *
 from getPatientInfo import *
 
 druglist = []
+drugsInfoDic={}
 patientInfo={}
 if len(patientInfo)==0:
     getPatientInfo(patientInfo)
@@ -38,7 +39,7 @@ while(True):
                 continue
             if(drugforinfo>=0 and drugforinfo<= len(druglist)):
                 print("-----DRUG INFO-----\n")
-                getInfo(druglist[drugforinfo][1])
+                getInfo(druglist[drugforinfo][1], "p", drugsInfoDic)
             else:
                 print("Choice out of range")
         else:

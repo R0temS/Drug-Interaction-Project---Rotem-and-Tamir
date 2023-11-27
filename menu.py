@@ -11,7 +11,7 @@ def menu():
 
 def showDrugList(druglist):
     if(len(druglist)!=0):
-        print("-----DRUG LIST-----\n")
+        print("-----DRUG LIST-----")
         count = 1
         for i,j in druglist:
             print(str(count) + ". ", end="")
