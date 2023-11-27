@@ -6,6 +6,7 @@ def menu():
     print("4. Drug info")
     print("5. Delete a drug")
     print("6. Quit\n")
+    print("ROTEM EDIT")
 
 def showDrugList(druglist):
     if(len(druglist)!=0):
