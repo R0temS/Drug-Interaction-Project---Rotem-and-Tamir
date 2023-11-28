@@ -42,7 +42,7 @@ while(True):
                 continue
             if(drugforinfo>=0 and drugforinfo<= len(druglist)):
                 print("-----DRUG INFO-----\n")
-                getInfo(druglist[drugforinfo][1], "p", drugsInfoDic, 0)
+                getInfo(druglist[drugforinfo][1], "p", drugsInfoDic,druglist[drugforinfo][0], 0)
             else:
                 print("Choice out of range")
         else:
@@ -71,6 +71,7 @@ while(True):
             print("Only a number!")
             continue
         if innerchoice == 1:
+            patientInfo={}
             getPatientInfo(patientInfo)
         elif innerchoice == 2:
             showPatientInfo(patientInfo)

@@ -5,7 +5,6 @@ def checkAllergy(drugsInfoDic, patientInfo):
         
         
         for allergy in patientInfo['Allergies']:
-            
             for drug in drugsInfoDic['druginfo']:
                 if drug['INDICATION AND USAGE'].find(allergy) != -1 and drug['INDICATION AND USAGE'].find("allergy") != -1:
                     lst.append(f"RELEVANT INDICATION AND USAGE --- BETWEEN DRUG - {drug['drugName']} - AND SUBSTANCE - {allergy}\n"+ drug['INDICATION AND USAGE'])
