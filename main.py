@@ -5,10 +5,11 @@ from searchDrugfun import *
 from drugInteractionfun import *
 from menu import *
 from getPatientInfo import *
+from checkallergyandbrd import *
 
-druglist = []
-drugsInfoDic={}
-patientInfo={}
+druglist = [] # a list of the drugs. item:[drug name, drug rxcui]
+drugsInfoDic={} # a dictionary containing information about the drugs. {"druginfo": [["rxcui": ###, "drugName": ###, "INDICATION AND USAGE": ###, "WARNINGS": ###, "DOSAGE AND ADMINISTRATION": ###],...]}
+patientInfo={} # a dictionary containing information about the patient. {'Name': ###, 'Age': ###, 'Allergies': [list of allergies], 'Background Dieseases': [list of background dieseases]}
 if len(patientInfo)==0:
     getPatientInfo(patientInfo)
 while(True): 
@@ -19,18 +20,19 @@ while(True):
         print("Only a number!")
         continue
     os.system('cls')
-    if choice == 1:
+    if choice == 1: #Add drugs to the druglist
         searchDrug(druglist)
         updatedrugsinfodic(drugsInfoDic, druglist)
-    elif choice == 2:
+        
+    elif choice == 2: #Show the druglist
         showDrugList(druglist)
-    elif choice == 3:
+    elif choice == 3: #Show the drug interactions
         if(len(druglist)!=0):
             print("-----DRUGS INTERACTIONS-----\n")
             drugInteraction(druglist)
         else:
             print("\nInsert drugs first!")
-    elif choice == 4:
+    elif choice == 4: #Shows info of specific drug
         if(len(druglist)!=0):
             showDrugList(druglist)
             try:
@@ -40,12 +42,12 @@ while(True):
                 continue
             if(drugforinfo>=0 and drugforinfo<= len(druglist)):
                 print("-----DRUG INFO-----\n")
-                getInfo(druglist[drugforinfo][1], "p", drugsInfoDic)
+                getInfo(druglist[drugforinfo][1], "p", drugsInfoDic, 0)
             else:
                 print("Choice out of range")
         else:
             print("\nInsert drugs first!")
-    elif choice == 5:
+    elif choice == 5: #Delete a specific drug from the druglist
         if(len(druglist)!=0):
             print("-----DELETE A DRUG-----")
             showDrugList(druglist)
@@ -56,11 +58,13 @@ while(True):
                 continue
             if(drugfordelete>=0 and drugfordelete<= len(druglist)):
                 druglist.pop(drugfordelete)
+                drugsInfoDic['druginfo'].pop(drugfordelete)
+
             else:
                 print("Choice out of range")
         else:
             print("\nInsert drugs first!")
-    elif choice == 6:
+    elif choice == 6: #Enter or show patient information
         try:
             innerchoice = int(input("1. Enter info\n2. Show info\n"))
         except Exception:
@@ -70,9 +74,14 @@ while(True):
             getPatientInfo(patientInfo)
         elif innerchoice == 2:
             showPatientInfo(patientInfo)
-        
+    elif choice == 7: #Show drug information that relevant for the patient allergies
+        if(len(druglist)!=0):
+            print("-----RELEVENT ALLERGIES INFO-----")
+            checkAllergy(drugsInfoDic, patientInfo)
+        else:
+            print("\nInsert drugs first!")  
 
-    elif choice==7:
+    elif choice==8: #exit the program
         print("BYE!")
         break
 

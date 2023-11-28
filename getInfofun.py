@@ -1,6 +1,10 @@
 import requests
-
-def getInfo(drug_rxcui, mode, drugsinfodic):
+#getInfo function:
+#mode "p":  prints basic info about a specific drug
+#mode "r":  updates the drugsInfoDic dictionary for a specific drug
+#
+#updatedrugsinfodic function updates the drugsInfoDic for all of the drugs in the druglist
+def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc):
     endpoint = "https://api.fda.gov/drug/label.json"
     params = {"search": f"openfda.rxcui:{drug_rxcui}"}
 
@@ -26,24 +30,29 @@ def getInfo(drug_rxcui, mode, drugsinfodic):
                 print("N/A")
             # Process the data, extract dosage information, etc.
         elif mode =="r":
-            drugsinfodic.update({"druginfo": {}})
-            drugsinfodic['druginfo'].update({"rxcui": drug_rxcui})
+            if len(drugsinfodic)==0:
+                drugsinfodic.update({"druginfo": []})
+            drugsinfodic['druginfo'].append({"rxcui": drug_rxcui})
+            drugsinfodic['druginfo'][loc].update({"drugName": drugName})
             try:
-                drugsinfodic['druginfo'].update({"INDICATION AND USAGE": data['results'][0]['indications_and_usage'][0]})
+                drugsinfodic['druginfo'][loc].update({"INDICATION AND USAGE": data['results'][0]['indications_and_usage'][0].lower()})
             except Exception:
-                drugsinfodic['druginfo'].update({"INDICATION AND USAGE": "N/A"})
+                drugsinfodic['druginfo'][loc].update({"INDICATION AND USAGE": "N/A"})
             try:
-                drugsinfodic['druginfo'].update({"WARNINGS": data['results'][0]['warnings'][0]})
+                drugsinfodic['druginfo'][loc].update({"WARNINGS": data['results'][0]['warnings'][0].lower()})
             except Exception:
-                drugsinfodic['druginfo'].update({"WARNINGS": "N/A"})
+                drugsinfodic['druginfo'][loc].update({"WARNINGS": "N/A"})
             try:
-                drugsinfodic['druginfo'].update({"DOSAGE AND ADMINISTRATION": data['results'][0]['dosage_and_administration'][0]})
+                drugsinfodic['druginfo'][loc].update({"DOSAGE AND ADMINISTRATION": data['results'][0]['dosage_and_administration'][0].lower()})
             except Exception:
-                drugsinfodic['druginfo'].update({"DOSAGE AND ADMINISTRATION": "N/A"})
+                drugsinfodic['druginfo'][loc].update({"DOSAGE AND ADMINISTRATION": "N/A"})
     else:
-        print(f"NO INFO FOUND")
+        if mode=="p":
+            print("NO INFO FOUND")
 
 
 def updatedrugsinfodic(drugsinfodic, druglist):
+    loc=0
     for drug in druglist:
-        getInfo(drug[1],"r",drugsinfodic)
+        getInfo(drug[1],"r",drugsinfodic, drug[0], loc)
+        loc+=1

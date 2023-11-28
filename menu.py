@@ -1,3 +1,6 @@
+#menu function prints the main menu
+#showDrugList prints the drugs in druglist
+
 def menu():
     print("\nChoose your preffered option:")
     print("1. Insert drugs")
@@ -6,7 +9,8 @@ def menu():
     print("4. Drug info")
     print("5. Delete a drug")
     print("6. Patient information")
-    print("7. Quit\n")
+    print("7. Relevant allergies information")
+    print("8. Quit\n")
     
 
 def showDrugList(druglist):
