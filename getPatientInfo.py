@@ -1,5 +1,11 @@
 import requests as req
+#getPatientInfo function recieves the folowing info:
+#-Name
+#-Age
+#-A list of allergies
+#-A list of background diseases
 
+#showPatientInfo function shows all of the information described above from the patientInfo dictionary
 def getPatientInfo(patientInfo):
     patientInfo.update({'Name':input("Enter your name: ")})
     age="a"
@@ -12,30 +18,38 @@ def getPatientInfo(patientInfo):
     allergy = "a"
     while allergy!="":
         if patientInfo.get('Allergies') == None:
-            allergy= input("Enter substances you are allergic to: ").lower()
+            allergy= input("Enter substances you are allergic to (leave empty to continue): ").lower()
             if allergy !="":
                 str = "https://rxnav.nlm.nih.gov/REST/spellingsuggestions.json?name=" + allergy
                 data =req.get(str).json()
                 if (len(data['suggestionGroup']['suggestionList']) == 1):
-                    allergy = data['suggestionGroup']['suggestionList']['suggestion'][0]
+                    allergy = data['suggestionGroup']['suggestionList']['suggestion'][len(data['suggestionGroup']['suggestionList']['suggestion'])-1]
                 else:
                     print("\nSUBSTANCE NOT FOUND!\n")
                     allergy="N/A"
             if allergy !="" and allergy!="N/A":
                 patientInfo.update({'Allergies':[allergy]})
-        else:
-            allergy= input("Enter substances you are allergic to: ").lower()
+        elif allergy!="":
+            allergy= input("Enter substances you are allergic to (leave empty to continue): ").lower()
             if allergy !="":
-                patientInfo['Allergies'].append(allergy)
+                str = "https://rxnav.nlm.nih.gov/REST/spellingsuggestions.json?name=" + allergy
+                data =req.get(str).json()
+                if (len(data['suggestionGroup']['suggestionList']) != 0):
+                        allergy = data['suggestionGroup']['suggestionList']['suggestion'][len(data['suggestionGroup']['suggestionList']['suggestion'])-1]
+                else:
+                        print("\nSUBSTANCE NOT FOUND!\n")
+                        allergy="N/A"
+                if allergy !="" and allergy!="N/A":
+                    patientInfo['Allergies'].append(allergy)
     
     backgroundDisease = "a"
     while backgroundDisease!="":
         if patientInfo.get('Background Dieseases') == None:
-            backgroundDisease= input("Enter your background Diseases: ").lower()
+            backgroundDisease= input("Enter your background Diseases (leave empty to continue): ").lower()
             if backgroundDisease!="":
                 patientInfo.update({'Background Dieseases':[backgroundDisease]})
         else:
-            backgroundDisease= input("Enter your background Diseases: ").lower()
+            backgroundDisease= input("Enter your background Dieseases (leave empty to continue): ").lower()
             if backgroundDisease !="":
                 patientInfo['Background Dieseases'].append(backgroundDisease)
 

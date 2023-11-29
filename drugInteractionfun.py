@@ -1,5 +1,5 @@
 import requests as req
-
+# drugInteraction function recieves the druglist and prints all of the drug interactions
 def drugInteraction(alldrugs):
     str = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
     if len(alldrugs)>0:
