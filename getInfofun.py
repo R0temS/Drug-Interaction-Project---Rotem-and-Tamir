@@ -4,6 +4,8 @@ import requests
 #mode "r":  updates the drugsInfoDic dictionary for a specific drug
 #
 #updatedrugsinfodic function updates the drugsInfoDic for all of the drugs in the druglist
+#
+#findLocationInDrugsInfoDic function finds if a info item is available for a specific drug and returns the location. if not found returns -1 
 def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc):
     endpoint = "https://api.fda.gov/drug/label.json"
     params = {"search": f"openfda.rxcui:{drug_rxcui}"}
@@ -49,10 +51,19 @@ def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc):
     else:
         if mode=="p":
             print("NO INFO FOUND")
-
+            
 
 def updatedrugsinfodic(drugsinfodic, druglist):
     loc=0
     for drug in druglist:
         getInfo(drug[1],"r",drugsinfodic, drug[0], loc)
+        loc=len(drugsinfodic['druginfo'])
+
+def findLocationInDrugsInfoDic(druglist, drugsInfoDic, drugfordelete):
+    rxcui = druglist[drugfordelete][1]
+    loc=0
+    for drug in drugsInfoDic['druginfo']:
+        if drug['rxcui'] == rxcui:
+            return loc
         loc+=1
+    return -1

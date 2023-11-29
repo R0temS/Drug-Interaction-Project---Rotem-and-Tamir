@@ -22,7 +22,9 @@ while(True):
     os.system('cls')
     if choice == 1: #Add drugs to the druglist
         searchDrug(druglist)
+        print("UPDATING THE DRUG LIST...")
         updatedrugsinfodic(drugsInfoDic, druglist)
+        os.system('cls')
         
     elif choice == 2: #Show the druglist
         showDrugList(druglist)
@@ -40,7 +42,7 @@ while(True):
             except Exception:
                 print("Only a number!")
                 continue
-            if(drugforinfo>=0 and drugforinfo<= len(druglist)):
+            if(drugforinfo>=0 and drugforinfo< len(druglist)):
                 print("-----DRUG INFO-----\n")
                 getInfo(druglist[drugforinfo][1], "p", drugsInfoDic,druglist[drugforinfo][0], 0)
             else:
@@ -56,9 +58,11 @@ while(True):
             except Exception:
                 print("Only a number!")
                 continue
-            if(drugfordelete>=0 and drugfordelete<= len(druglist)):
+            if(drugfordelete>=0 and drugfordelete< len(druglist)):
+                drugfordelete1 = findLocationInDrugsInfoDic(druglist, drugsInfoDic, drugfordelete)
                 druglist.pop(drugfordelete)
-                drugsInfoDic['druginfo'].pop(drugfordelete)
+                if drugfordelete1!=-1:
+                    drugsInfoDic['druginfo'].pop(drugfordelete1)
 
             else:
                 print("Choice out of range")
@@ -86,4 +90,4 @@ while(True):
         print("BYE!")
         break
 
-
+    
