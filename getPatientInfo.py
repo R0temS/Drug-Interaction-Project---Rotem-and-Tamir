@@ -1,3 +1,4 @@
+from re import T
 import requests as req
 #getPatientInfo function recieves the folowing info:
 #-Name
@@ -40,18 +41,20 @@ def getPatientInfo(patientInfo):
                         print("\nSUBSTANCE NOT FOUND!\n")
                         allergy="N/A"
                 if allergy !="" and allergy!="N/A":
-                    patientInfo['Allergies'].append(allergy)
+                    if checkForDuplicatePatientInfo("allergy", allergy, patientInfo) == False:
+                        patientInfo['Allergies'].append(allergy)
     
     backgroundDisease = "a"
     while backgroundDisease!="":
         if patientInfo.get('Background Dieseases') == None:
-            backgroundDisease= input("Enter your background Diseases (leave empty to continue): ").lower()
+            backgroundDisease= input("Enter your background Dieseases (leave empty to continue): ").lower()
             if backgroundDisease!="":
                 patientInfo.update({'Background Dieseases':[backgroundDisease]})
         else:
             backgroundDisease= input("Enter your background Dieseases (leave empty to continue): ").lower()
             if backgroundDisease !="":
-                patientInfo['Background Dieseases'].append(backgroundDisease)
+                if checkForDuplicatePatientInfo("background", backgroundDisease, patientInfo) == False:
+                    patientInfo['Background Dieseases'].append(backgroundDisease)
 
 def showPatientInfo(patientInfo):
     if patientInfo.get("Age")!=None:
@@ -66,4 +69,15 @@ def showPatientInfo(patientInfo):
         for brd in patientInfo['Background Dieseases']:
             print("- "+brd)
         print("")
-        
+
+def checkForDuplicatePatientInfo(mode, item, patientInfo):
+    if mode == "allergy":
+        for x in patientInfo['Allergies']:
+            if x == item:
+                return True
+    elif mode == "background":
+        for x in patientInfo['Background Dieseases']:
+            if x == item:
+                return True
+
+    return False
