@@ -85,9 +85,15 @@ while(True):
             checkAllergy(drugsInfoDic, patientInfo)
         else:
             print("\nInsert drugs first!")  
-
-    elif choice==8: #exit the program
+    elif choice == 8: #Show drug information that relevant for the patient allergies
+        if(len(druglist)!=0):
+            print("-----RELEVENT BACKGROUND DIESEASES INFO-----")
+            checkBackgroundDiesease(drugsInfoDic, patientInfo)
+        else:
+            print("\nInsert drugs first!")  
+    elif choice==9: #exit the program
         print("BYE!")
         break
 
+    
     

@@ -10,7 +10,8 @@ def menu():
     print("5. Delete a drug")
     print("6. Patient information")
     print("7. Relevant allergies information")
-    print("8. Quit\n")
+    print("8. Relevant background dieseases information")
+    print("9. Quit\n")
     
 
 def showDrugList(druglist):
@@ -23,3 +24,4 @@ def showDrugList(druglist):
             count+=1
     else:
         print("\nInsert drugs first!")
+        
