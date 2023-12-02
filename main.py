@@ -17,6 +17,7 @@ while(True):
     try:
         choice = int(input(""))
     except Exception:
+        os.system('cls')
         print("Only a number!")
         continue
     os.system('cls')

@@ -50,7 +50,7 @@ def searchDrug(alldrugs):
                     except Exception:
                         print("Only a number!")
                         continue
-                    if(choice>=0 and choice<= count-1):
+                    if(choice>=0 and choice< count-1):
                         if checkforduplicate(i['conceptProperties'][choice]['rxcui'], alldrugs) == False:
                             alldrugs.append([i['conceptProperties'][choice]['name'],i['conceptProperties'][choice]['rxcui']])
                     else:
