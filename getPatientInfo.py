@@ -8,7 +8,7 @@ import requests as req
 
 #showPatientInfo function shows all of the information described above from the patientInfo dictionary
 def getPatientInfo(patientInfo):
-    patientInfo.update({'Name':input("Enter your name: ")})
+    patientInfo.update({'Name':input("Enter your name: ").capitalize()})
     age="a"
     while age=="a":
         try:
