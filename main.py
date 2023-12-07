@@ -97,4 +97,6 @@ while(True):
         break
 
     
-    
+def addDrugs():
+    searchDrug(druglist)
+    updatedrugsinfodic(drugsInfoDic, druglist)
