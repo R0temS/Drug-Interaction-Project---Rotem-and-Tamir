@@ -2,14 +2,12 @@ import requests as req
 import os
 from tkinter import *
 from tkinter import messagebox
-from menu import *
 
 #searchDrug function checks if a drug exists in the Api and adds it to the drug list
 #checkforduplicate function checks if a specific drug is already exist in the druglist, if so it returns True, else it returns False
 def searchDrug(alldrugs):
     def skip():
         drugWindow.destroy()
-        menu()
     def drugOptions():
         try:
             optionsWindow.destroy()
