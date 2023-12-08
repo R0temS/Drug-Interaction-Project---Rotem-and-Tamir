@@ -79,7 +79,7 @@ from tkinter import messagebox
 
 
 # create submit function for DB
-def submit(patientInfo):
+def submit(patientInfo, firstName, lastName, Age, allergies, bgIlnesses, info):
     # handling name
     patientInfo.update({'Name':firstName.get().capitalize()+" "+lastName.get().capitalize()})
     
@@ -127,50 +127,50 @@ def submit(patientInfo):
     Age.delete(0, END)
     bgIlnesses.delete(0, END)
     allergies.delete(0, END)
-    print(patientInfo)
+    info.destroy()
     
     
            
-info = Tk()
-
-# create text boxes
-firstName = Entry(info, width=30)
-firstName.grid(row=0, column=1, padx=20 )
-lastName = Entry(info, width=30)
-lastName.grid(row=1, column=1, padx=20 )
-Age = Entry(info, width=30)
-Age.grid(row=2, column=1, padx=20 )
-bgIlnesses = Entry(info, width=30)
-bgIlnesses.grid(row=4, column=1, padx=20 )
-allergies = Entry(info, width=30)
-allergies.grid(row=5, column=1, padx=20 )
+def getPatientInfo(patientInfo):
+    info = Tk()
     
-
-# create text box lables
-firstNameL = Label(info, text = "First Name")
-firstNameL.grid(row=0, column=0)
-
-lastNameL = Label(info, text = "Last Name")
-lastNameL.grid(row=1, column=0)
-
-ageL = Label(info, text = "Age")
-ageL.grid(row=2, column=0)
-
-bgIlnessesL = Label(info, text = "Background Ilnesses")
-bgIlnessesL.grid(row=4, column=0)
+    # create text boxes
+    firstName = Entry(info, width=30)
+    firstName.grid(row=0, column=1, padx=20 )
+    lastName = Entry(info, width=30)
+    lastName.grid(row=1, column=1, padx=20 )
+    Age = Entry(info, width=30)
+    Age.grid(row=2, column=1, padx=20 )
+    bgIlnesses = Entry(info, width=30)
+    bgIlnesses.grid(row=4, column=1, padx=20 )
+    allergies = Entry(info, width=30)
+    allergies.grid(row=5, column=1, padx=20 )
+        
     
-allergiesL = Label(info, text = "Allergies")
-allergiesL.grid(row=5, column=0)
-
-
-#create submit button
-dic = {}
-submitBtn = Button(info, text="Add record to DB", command= lambda: submit(dic))
-submitBtn.grid(row=6, column=0, columnspan=2, padx=10, ipadx=100)
-
-
-
-info.mainloop()
+    # create text box lables
+    firstNameL = Label(info, text = "First Name")
+    firstNameL.grid(row=0, column=0)
+    
+    lastNameL = Label(info, text = "Last Name")
+    lastNameL.grid(row=1, column=0)
+    
+    ageL = Label(info, text = "Age")
+    ageL.grid(row=2, column=0)
+    
+    bgIlnessesL = Label(info, text = "Background Ilnesses")
+    bgIlnessesL.grid(row=4, column=0)
+        
+    allergiesL = Label(info, text = "Allergies")
+    allergiesL.grid(row=5, column=0)
+    
+    
+    #create submit button
+    submitBtn = Button(info, text="Add record to DB", command= lambda: submit(patientInfo,firstName, lastName, Age, allergies, bgIlnesses, info))
+    submitBtn.grid(row=6, column=0, columnspan=2, padx=10, ipadx=100)
+    
+    
+    
+    info.mainloop()
 
 
 def checkForDuplicatePatientInfo(mode, item, patientInfo):
@@ -189,7 +189,7 @@ def checkForDuplicatePatientInfo(mode, item, patientInfo):
 # i created a DB - but i need to know how to approach the values inside of it (with "." or []?)
 
 
-def reviewProfile():
+def reviewProfile():##!!!!!need to be taken from the patientInfo dictionary!!!!
     reviewInfo = Toplevel()
      #create text boxes
     firstName = info.firstName.get()
