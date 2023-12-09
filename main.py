@@ -22,7 +22,7 @@ from tkinter import messagebox
 # deffining functionalities of buttons
 druglist = [] # a list of the drugs. item:[drug name, drug rxcui]
 drugsInfoDic={} # a dictionary containing information about the drugs. {"druginfo": [["rxcui": ###, "drugName": ###, "INDICATION AND USAGE": ###, "WARNINGS": ###, "DOSAGE AND ADMINISTRATION": ###],...]}
-patientInfo={} # a dictionary containing information about the patient. {'Name': ###, 'Age': ###, 'Allergies': [list of allergies], 'Background Dieseases': [list of background dieseases]}
+patientInfo={} # a dictionary containing information about the patient. {'firstName': ###, 'lastName': ###, 'Age': ###, 'Allergies': [list of allergies], 'Background Dieseases': [list of background dieseases]}
 
-getPatientInfo(patientInfo)
+getPatientInfo(patientInfo, "", "", "", "")
 mainMenu(druglist, drugsInfoDic, patientInfo)

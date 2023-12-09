@@ -73,8 +73,8 @@ def clickSchedule (): # creates a new schedule for the user
 def clickWarnings (allDrugs): # shows the relevant warnings for the user
     drugInteraction(allDrugs)
     
-def clickProfile (): # shows the user profile
-   reviewProfile() 
+def clickProfile (patientInfo): # shows the user profile
+   reviewProfile(patientInfo) 
     
 def clickRecommand (): # recommending on drug to a sick user
     print ("recommending on drugs to a sick user")
@@ -194,7 +194,7 @@ def mainMenu(druglist, drugsInfoDic, patientInfo):
     #button for showing user profile
     showProfile = Button(frame,
                            text="MY PROFILE",
-                           command=clickProfile,
+                           command=lambda: clickProfile(patientInfo),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
