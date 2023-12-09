@@ -61,8 +61,59 @@ def showDrugList(druglist):
     else:
         messagebox.showerror(message = "Insert drugs first!", title= "alert")
 
+def getInfoSubmit(choice, druglist, entrybox, listWindow, drugsInfodic):
+    try:
+        choice= int(choice)
+    except Exception:
+        entrybox.delete(0, END)
+        messagebox.showerror(title='Input error', message='ENTER ONLY INTEGERS!')
+        return
+    if (choice<1 or choice>len(druglist)):
+        entrybox.delete(0, END)
+        messagebox.showerror(title='Input error', message='CHOICE OUT OF RANGE!')
+        return
+    else:
+        choice -=1
+        listWindow.destroy()
+        getInfo(druglist[choice][1], "p", drugsInfodic, druglist[choice][0], 0, listWindow)
 
+def drugInfo(druglist, drugsInfodic, window):
+    if(len(druglist)!=0):
+        window.destroy()
+        listWindow = Tk()
+        listWindow.configure(bg='white')
+        headline=Label(listWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="-----DRUG LIST-----")
+        textbox = Label(listWindow, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
+        entrybox = Entry(listWindow, width=30)
+        label = Label(listWindow, text = "Which Drug?")
+        pick = Button(listWindow, 
+                           text="Submit",
+                           command=lambda: getInfoSubmit(entrybox.get(), druglist, entrybox, listWindow, drugsInfodic),
+                           font=("Comic Sans", 20),
+                           fg="White",
+                           background="#20A5C9",
+                           activebackground="#20A5C1",
+                           activeforeground="White",
+                           state=ACTIVE,
+                           compound='bottom',
+                           padx=10,
+                           pady=10, width=25)
+        text=""
+        count = 1
+        for i,j in druglist:
+            
+            text = text+"\n"+ str(count) + ". " + i+" -- rxcui: "+j
+            count+=1
+        textbox.configure(text=text)
+        headline.grid(row=0, column=0)
+        textbox.grid(row=1, column=0)
+        label.grid(row=2, column=0)
+        entrybox.grid(row=2, column=1)
+        pick.grid(row=2, column=2)
 
+        listWindow.mainloop()
+    else:
+        messagebox.showerror(message = "Insert drugs first!", title= "alert")
 
 def clickHistory (): # opens a new window with the history details
     print("showing history")
@@ -242,8 +293,8 @@ def mainMenu(druglist, drugsInfoDic, patientInfo):
     showProfile.grid(column=1 , row=4, columnspan=2)
 
     druginfo = Button(frame,
-                           text="EXIT",
-                           command=lambda: druginfo(),
+                           text="DRUG INFO",
+                           command= lambda: drugInfo(druglist, drugsInfoDic, window),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
