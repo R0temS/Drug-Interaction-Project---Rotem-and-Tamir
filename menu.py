@@ -239,7 +239,22 @@ def mainMenu(druglist, drugsInfoDic, patientInfo):
                            padx=10,
                            pady=10,
                            width=25)
-    showProfile.grid(column=2 , row=3, columnspan=2)
+    showProfile.grid(column=1 , row=4, columnspan=2)
+
+    druginfo = Button(frame,
+                           text="EXIT",
+                           command=lambda: druginfo(),
+                           font=("Comic Sans", 20),
+                           fg="White",
+                           background="#20A5C9",
+                           activebackground="#20A5C9",
+                           activeforeground="White",
+                           state=ACTIVE,
+                           compound='bottom',
+                           padx=10,
+                           pady=10,
+                           width=25)
+    druginfo.grid(column=2 , row=3, columnspan=2)
     
     # # DB creation
     
