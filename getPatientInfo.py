@@ -136,7 +136,7 @@ def bgillnessInsert(patientInfo,firstName, lastName, Age, allergyWindow):
                      activeforeground="White")
     finishBtn.grid(row=1, column=1, padx=10, ipadx=50)
     previewsBtn = Button(bgillnessWindow,
-                     text="preview",
+                     text="previews",
                      command= lambda: allergiesInsert(patientInfo,firstName, lastName, Age, bgillnessWindow),
                      font=("Comic Sans", 16),
                      fg="White",
@@ -189,7 +189,7 @@ def allergiesInsert(patientInfo, firstName, lastName, Age, info):
                      activeforeground="White")
     nextBtn.grid(row=1, column=1, padx=10, ipadx=50)
     previewsBtn = Button(allergyWindow,
-                     text="preview",
+                     text="previews",
                      command= lambda: getPatientInfo(patientInfo,firstName, lastName, Age, allergyWindow),
                      font=("Comic Sans", 16),
                      fg="White",
