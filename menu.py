@@ -12,17 +12,6 @@ from checkallergyandbrd import *
 import sqlite3 
 from drugInteractionfun import *
 from getPatientInfo import *
-#def menu():
-    #print("\nChoose your preffered option:")
-    #print("1. Insert drugs")
-    #print("2. Show drug list")
-    #print("3. Check for drugs interactions")
-    #print("4. Drug info")
-    #print("5. Delete a drug")
-    #print("6. Patient information")
-    #print("7. Relevant allergies information")
-    #print("8. Relevant background dieseases information")
-    #print("9. Quit\n")
     
 def menu():
   print("\nChoose your preffered option:")

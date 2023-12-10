@@ -78,10 +78,13 @@ from tkinter import *
 from tkinter import messagebox
 
 def updatepatientInfo(patientInfo,firstName, lastName, Age, bgillnessWindow):
+    #allergies and bg illnesses already updated
     patientInfo.update({'firstName': firstName.capitalize()})
     patientInfo.update({'lastName': lastName.capitalize()})
     patientInfo.update({'Age': Age})
     bgillnessWindow.destroy()
+
+
 
 
 def addAllergy(patientInfo, allergy, allergybox):

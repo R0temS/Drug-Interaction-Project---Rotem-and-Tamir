@@ -18,13 +18,13 @@ def searchDrug(alldrugs):
                 alldrugs.append([i['conceptProperties'][loc]['name'],i['conceptProperties'][loc]['rxcui']])
             optionsWindow.destroy()
             searchDrug(alldrugs)
-        drugSearch = entry.get()
+        drugSearch = entry.get().lower()
         if drugSearch == "":
             messagebox.showerror(title="entry error",message="Insert a drug name first!")
         else:
              str = "https://rxnav.nlm.nih.gov/REST/drugs.json?name=" + drugSearch
              data = req.get(str).json()
-    
+             
     
              if (len(data['drugGroup']) != 2):
                  str = "https://rxnav.nlm.nih.gov/REST/spellingsuggestions.json?name=" + drugSearch
