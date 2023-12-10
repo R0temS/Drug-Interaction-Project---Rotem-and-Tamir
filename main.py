@@ -48,9 +48,9 @@ try:
     c.execute("""CREATE TABLE drugsInfo(
                        rxcui text, 
                        drugName text, 
-                       INDICATION AND USAGE text, 
+                       INDICATION_AND_USAGE text, 
                        WARNINGS text, 
-                       DOSAGE AND ADMINISTRATION text
+                       DOSAGE_AND_ADMINISTRATION text
                        )""")
     c.execute("""CREATE TABLE historyDrugs(
                        drugname text,
@@ -68,8 +68,6 @@ try:
 
 except Exception:
     getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs)
-
-
 
 
 mainMenu(druglist, drugsInfoDic, patientInfo)

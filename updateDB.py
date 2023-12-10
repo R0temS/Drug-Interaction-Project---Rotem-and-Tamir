@@ -30,7 +30,6 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
 
     for drugname, drugrxcui, perweek, perday in zip (drugname, drugrxcui, perweek, perday):
         historyDrugs.append([drugname, drugrxcui, perweek, perday])
-    conn.close()
 
     #patient info
     c.execute('SELECT firstName FROM info')
@@ -58,11 +57,11 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
     rxcui = c.fetchall()
     c.execute('SELECT drugName FROM drugsInfo')
     drugName = c.fetchall()
-    c.execute('SELECT INDICATION AND USAGE FROM drugsInfo')
+    c.execute('SELECT INDICATION_AND_USAGE FROM drugsInfo')
     INDICATION_AND_USAGE = c.fetchall()
     c.execute('SELECT WARNINGS FROM drugsInfo')
     WARNINGS = c.fetchall()
-    c.execute('SELECT DOSAGE AND ADMINISTRATION FROM drugsInfo')
+    c.execute('SELECT DOSAGE_AND_ADMINISTRATION FROM drugsInfo')
     DOSAGE_AND_ADMINISTRATION = c.fetchall()
 
     drugsInfoDic.update({"druginfo": []})
@@ -96,8 +95,8 @@ def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, mode):
             
          
         if mode == "druginfo":
-            c.execute('UPDATE drugsInfo SET rxcui = NULL, drugName = NULL, INDICATION AND USAGE = NULL, WARNINGS = NULL, DOSAGE AND ADMINISTRATION = NULL')  #initializing the table values
+            c.execute('UPDATE drugsInfo SET rxcui = NULL, drugName = NULL, INDICATION_AND_USAGE = NULL, WARNINGS = NULL, DOSAGE_AND_ADMINISTRATION = NULL')  #initializing the table values
             
             
-                    
+        conn.commit()           
         conn.close()
