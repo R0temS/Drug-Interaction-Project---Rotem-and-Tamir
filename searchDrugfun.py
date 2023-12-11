@@ -2,22 +2,28 @@ import requests as req
 import os
 from tkinter import *
 from tkinter import messagebox
+from updateDB import *
 
 #searchDrug function checks if a drug exists in the Api and adds it to the drug list
 #checkforduplicate function checks if a specific drug is already exist in the druglist, if so it returns True, else it returns False
-def searchDrug(alldrugs):
+def searchDrug(druglist):
     def skip():
         drugWindow.destroy()
+        updateDB(druglist, "", "", "", "druglist")
+        ## need to add update hisory function
     def drugOptions():
         try:
             optionsWindow.destroy()
         except Exception:
             pass
         def choiceFun(loc):
-            if checkforduplicate(i['conceptProperties'][loc]['rxcui'], alldrugs) == False:
-                alldrugs.append([i['conceptProperties'][loc]['name'],i['conceptProperties'][loc]['rxcui']])
+            if checkforduplicate(i['conceptProperties'][loc]['rxcui'], druglist) == False:
+                ##function of recieving the perday perweek
+                druglist.append([i['conceptProperties'][loc]['name'],i['conceptProperties'][loc]['rxcui'], "perday", "perweek"])
+            else:
+                messagebox.showinfo(title="Attention",message="Drug already exists!")
             optionsWindow.destroy()
-            searchDrug(alldrugs)
+            searchDrug(druglist)
         drugSearch = entry.get().lower()
         if drugSearch == "":
             messagebox.showerror(title="entry error",message="Insert a drug name first!")
@@ -79,7 +85,7 @@ def searchDrug(alldrugs):
     drugWindow.config()
     entry = Entry(drugWindow, font=("Ariel", 30))
     entry.pack(side=LEFT)
-    skipButton= Button(drugWindow, text="Skip", command=skip)
+    skipButton= Button(drugWindow, text="Continue", command=skip)
     skipButton.pack(side=RIGHT)
     searchButton = Button(drugWindow, text="Search", command=drugOptions)
     searchButton.pack(side=RIGHT)

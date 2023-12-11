@@ -24,8 +24,8 @@ from updateDB import *
 # deffining functionalities of buttons
 druglist = [] # a list of the drugs. item:[drug name, drug rxcui, perWeek, perDay]
 drugsInfoDic={} # a dictionary containing information about the drugs. {"druginfo": [{"rxcui": ###, "drugName": ###, "INDICATION AND USAGE": ###, "WARNINGS": ###, "DOSAGE AND ADMINISTRATION": ###},...]}
-patientInfo={} # a dictionary containing information about the patient. {'firstName': ###, 'lastName': ###, 'Age': ###, 'Allergies': [list of allergies], 'Background Dieseases': [list of background dieseases]}
-historyDrugs={} # a list of the history of the used drugs. item:[drug name, drug rxcui, perWeek, perDay]
+patientInfo={'Allergies': [], 'Background Dieseases': []} # a dictionary containing information about the patient. {'firstName': ###, 'lastName': ###, 'Age': ###, 'Allergies': [list of allergies], 'Background Dieseases': [list of background dieseases]}
+historyDrugs=[] # a list of the history of the used drugs. item:[drug name, drug rxcui, perWeek, perDay]
 # DB creation
 
 try:

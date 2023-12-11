@@ -1,4 +1,5 @@
 import requests
+from updateDB import *
 #getInfo function:
 #mode "p":  prints basic info about a specific drug
 #mode "r":  updates the drugsInfoDic dictionary for a specific drug
@@ -58,6 +59,8 @@ def updatedrugsinfodic(drugsinfodic, druglist):
     for drug in druglist:
         getInfo(drug[1],"r",drugsinfodic, drug[0], loc, "")
         loc=len(drugsinfodic['druginfo'])
+    ##drugsinfodic updated
+    updateDB("", drugsinfodic, "", "", "druginfo")
 
 def findLocationInDrugsInfoDic(druglist, drugsInfoDic, drugfordelete):
     rxcui = druglist[drugfordelete][1]

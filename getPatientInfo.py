@@ -83,6 +83,7 @@ def updatepatientInfo(patientInfo,firstName, lastName, Age, bgillnessWindow):
     patientInfo.update({'lastName': lastName.capitalize()})
     patientInfo.update({'Age': Age})
     bgillnessWindow.destroy()
+    updateDB("", "", patientInfo, "", "patientinfo")
 
 
 

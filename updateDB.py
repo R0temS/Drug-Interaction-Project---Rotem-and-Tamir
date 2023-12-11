@@ -16,7 +16,7 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
     perday = c.fetchall()
 
     for drugname, drugrxcui, perweek, perday in zip (drugname, drugrxcui, perweek, perday):
-        druglist.append([drugname, drugrxcui, perweek, perday])
+        druglist.append([str(drugname)[2:-3], str(drugrxcui)[2:-3], str(perweek)[2:-3], str(perday)[2:-3]])
 
     #history
     c.execute('SELECT drugname FROM historyDrugs')
@@ -29,7 +29,7 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
     perday = c.fetchall()
 
     for drugname, drugrxcui, perweek, perday in zip (drugname, drugrxcui, perweek, perday):
-        historyDrugs.append([drugname, drugrxcui, perweek, perday])
+        historyDrugs.append([str(drugname)[2:-3], str(drugrxcui)[2:-3], str(perweek)[2:-3], str(perday)[2:-3]])
 
     #patient info
     c.execute('SELECT firstName FROM info')
@@ -43,7 +43,7 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
     c.execute('SELECT allergies FROM info')
     allergies = c.fetchall()
    
-    patientInfo.update({'firstName': firstName, 'lastName': lastName, 'Age': age, 'Allergies': [], 'Background Dieseases': []})
+    patientInfo.update({'firstName': str(firstName)[3:-4], 'lastName': str(lastName)[3:-4], 'Age': str(age)[3:-4], 'Allergies': [], 'Background Dieseases': []})
     for bgilnesses in bgilnesses:
         patientInfo['Background Dieseases'].append(bgilnesses)
 
@@ -66,7 +66,7 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
 
     drugsInfoDic.update({"druginfo": []})
     for rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION in zip (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION):
-        drugsInfoDic['druginfo'].append({"rxcui": rxcui, "drugName": drugName, "INDICATION AND USAGE": INDICATION_AND_USAGE, "WARNINGS": WARNINGS, "DOSAGE AND ADMINISTRATION": DOSAGE_AND_ADMINISTRATION})
+        drugsInfoDic['druginfo'].append({"rxcui": rxcui, "drugName": drugName, "INDICATION_AND_USAGE": INDICATION_AND_USAGE, "WARNINGS": WARNINGS, "DOSAGE_AND_ADMINISTRATION": DOSAGE_AND_ADMINISTRATION})
     
     conn.close()
     
@@ -78,25 +78,29 @@ def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, mode):
         if mode == "druglist":
             c.execute('UPDATE druglist SET drugname = NULL, drugrxcui = NULL, perweek = NULL, perday = NULL')  #initializing the table values
 
-            for item in druglist:
-                for drugname, drugrxcui, perweek, perday in item:
+            for drugname, drugrxcui, perweek, perday in druglist:
                     c.execute('INSERT INTO drugList (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
 
         if mode == "drughistory":
             c.execute('UPDATE historyDrugs SET drugname = NULL, drugrxcui = NULL, perweek = NULL, perday = NULL')  #initializing the table values
 
-            for item in historyDrugs:
-                for drugname, drugrxcui, perweek, perday in item:
+            for drugname, drugrxcui, perweek, perday in historyDrugs:
                     c.execute('INSERT INTO historyDrugs (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
         
         if mode == "patientinfo":
             c.execute('UPDATE info SET firstName = NULL, lastName = NULL, age = NULL, bgilnesses = NULL, allergies = NULL')  #initializing the table values
-            
+            c.execute('INSERT INTO info (firstName, lastName, age) VALUES (?, ?, ?)', ( patientInfo['firstName'], patientInfo['lastName'], patientInfo['Age']))
+            for allergy in patientInfo['Allergies']:
+                c.execute('INSERT INTO info (allergies) VALUES (?)', (allergy))
+
+            for bgilnesses in patientInfo['Background Dieseases']:
+                c.execute('INSERT INTO info (bgilnesses) VALUES (?)', (bgilnesses))
             
          
         if mode == "druginfo":
             c.execute('UPDATE drugsInfo SET rxcui = NULL, drugName = NULL, INDICATION_AND_USAGE = NULL, WARNINGS = NULL, DOSAGE_AND_ADMINISTRATION = NULL')  #initializing the table values
-            
+            for item in drugsInfoDic['druginfo']:
+                c.execute('INSERT INTO drugsInfo (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION) VALUES (?, ?, ?, ?, ?)', (item['rxcui'], item['drugName'], item['INDICATION AND USAGE'], item['WARNINGS'], item['DOSAGE AND ADMINISTRATION']))
             
         conn.commit()           
         conn.close()

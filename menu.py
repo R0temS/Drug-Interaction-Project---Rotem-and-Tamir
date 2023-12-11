@@ -39,7 +39,7 @@ def showDrugList(druglist):
         textbox = Label(listWindow, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
         text=""
         count = 1
-        for i,j in druglist:
+        for i,j,d,w in druglist:
             
             text = text+"\n"+ str(count) + ". " + i+" -- rxcui: "+j
             count+=1
@@ -89,7 +89,7 @@ def drugInfo(druglist, drugsInfodic, window):
                            pady=10, width=25)
         text=""
         count = 1
-        for i,j in druglist:
+        for i,j,d,w in druglist:
             
             text = text+"\n"+ str(count) + ". " + i+" -- rxcui: "+j
             count+=1
