@@ -296,43 +296,55 @@ def checkForDuplicatePatientInfo(mode, item, patientInfo):
 
 
 def reviewProfile(patientInfo):##!!!!!need to be taken from the patientInfo dictionary!!!!
-    #reviewInfo = Toplevel()
-    # #create text boxes
-    #firstName = info.firstName.get()
-    #firstName.grid(row=0, column=1, padx=20 )
-    #lastName = info.lastName.get()
-    #lastName.grid(row=1, column=1, padx=20 )
-    #age = info.age.get()
-    #age.grid(row=2, column=1, padx=20 )
-    #bgIlnesses = info.bgIlnesses.get()
-    #bgIlnesses.grid(row=4, column=1, padx=20 )
-
-    ## create text box lables
-    #firstNameL = Label(reviewInfo, text = "First Name: ")
-    #firstNameL.grid(row=0, column=0)
-
-    #lastNameL = Label(reviewInfo, text = "Last Name: ")
-    #lastNameL.grid(row=1, column=0)
-
-    #ageL = Label(reviewInfo, text = "Age: ")
-    #ageL.grid(row=2, column=0)
-
-    #bgIlnessesL = Label(reviewInfo, text = "Background Ilnesses: ")
-    #bgIlnessesL.grid(row=4, column=0)
-
-    #add = Button(reviewInfo,
-    #             text="EDIT",       
-    #             font=("Comic Sans", 20),
-    #             fg="White",
-    #             background="#20A5C9",
-    #             activebackground="#20A5C9",
-    #             activeforeground="White",
-    #             state=ACTIVE,
-    #             compound='bottom',
-    #             padx=10,
-    #             pady=10, width=25)
+    reviewInfo = Toplevel()
+    reviewInfo.configure(bg="white")
+    headline=Label(reviewInfo, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="-----Patient Info-----")
+    textbox = Label(reviewInfo, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
+    text=f"The information of {patientInfo['firstName']} {patientInfo['lastName']}:\n\nAge: {patientInfo['Age']}\n"
+    if len(patientInfo['Allergies'])!=0:
+        text = text +"\nAllergies:\n"
+        for allergy in patientInfo['Allergies']:
+            text = text+ f"- {allergy}\n"
+    else:
+        text = text +"\nHas no allergies\n"
+    if len(patientInfo['Background Dieseases'])!=0:
+        text = text +"\nBackground Dieseases:\n"
+        for diesease in patientInfo['Background Dieseases']:
+            text = text+ f"- {diesease}\n"
+    else:
+        text = text +"\nHas no background dieseases\n"
     
+    textbox.configure(text=text)
+    headline.grid(row=0,column=0, columnspan=2)
+    textbox.grid(row=1,column=0, columnspan=2)
+    add = Button(reviewInfo,
+                 command= lambda: getPatientInfo(patientInfo, patientInfo['firstName'], patientInfo['lastName'], patientInfo['Age'], reviewInfo),
+                 text="EDIT INFO",       
+                 font=("Comic Sans", 20),
+                 fg="White",
+                 background="#20A5C9",
+                 activebackground="#20A5C9",
+                 activeforeground="White",
+                 state=ACTIVE,
+                 compound='bottom',
+                 padx=10,
+                 pady=10, width=25)
+    add.grid(row=3, column=0)
     
-    #reviewInfo.mainloop()
+    back = Button(reviewInfo,
+                 command= lambda: reviewInfo.destroy(),
+                 text="Back to menu",       
+                 font=("Comic Sans", 20),
+                 fg="White",
+                 background="#20A5C9",
+                 activebackground="#20A5C9",
+                 activeforeground="White",
+                 state=ACTIVE,
+                 compound='bottom',
+                 padx=10,
+                 pady=10, width=25)
+    back.grid(row=3, column=1)
+    
+    reviewInfo.mainloop()
 
     print(patientInfo)

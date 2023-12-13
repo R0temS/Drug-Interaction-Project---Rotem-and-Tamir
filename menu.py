@@ -178,8 +178,8 @@ def clickHistory (historyDrugs): # opens a new window with the history details
             text = text+"\n"+ str(count) + ". " + i+" -- rxcui: "+j
             count+=1
         textbox.configure(text=text)
-        headline.grid(row = 0, column =1, rowspan=2)
-        textbox.grid(row = 1, column =0, rowspan=4)
+        headline.grid(row = 0, column =0, columnspan=4)
+        textbox.grid(row = 1, column =0, columnspan=4)
 
         previewsBtn = Button(historyWindow,
                      text="previews",
@@ -189,7 +189,7 @@ def clickHistory (historyDrugs): # opens a new window with the history details
                      background="#20A5C9",
                      activebackground="#20A5C9",
                      activeforeground="White")
-        previewsBtn.grid(row=2, column=0, padx=10, ipadx=50)
+        previewsBtn.grid(row=2, column=1, padx=10, ipadx=50, columnspan=2)
         historyWindow.mainloop()
     else:
         messagebox.showerror(message = "No history found!", title= "attention")
