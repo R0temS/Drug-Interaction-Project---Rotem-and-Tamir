@@ -34,13 +34,20 @@ def menu():
   #window.mainloop()
 
 #this function recieves an index of a drug in the drug list and removes it from there
-def removeDrug(druglist, index):
-    druglist.pop(int(index)-1)
+def removeDrug(druglist, index, historyDrugs):
+    if index.isdigit() == True:
+        if (int(index)>=0 and int(index)< len(druglist)):
+            historyDrugs.append(druglist[int(index)-1])
+            druglist.pop(int(index)-1)
+        else:
+            messagebox.showerror(title='Input error', message='CHOICE OUT OF RANGE!')
+    else:
+        messagebox.showerror(title='Input error', message='ENTER ONLY INTEGERS!')
     updateDB(druglist, "", "", "", "druglist")  # updating the DB
     print(druglist)
     
 
-def showDrugList(druglist):
+def showDrugList(druglist, historyDrugs):
     if(len(druglist)!=0):
         listWindow = Tk()
         listWindow.configure(bg='white')
@@ -61,7 +68,7 @@ def showDrugList(druglist):
         # creating button for removing a drug from the list to History section   
         remove = Button(listWindow,
                         text="Remove Drug",
-                        command=lambda: removeDrug(druglist, entrybox.get()),
+                        command=lambda: removeDrug(druglist, entrybox.get(), historyDrugs),
                         font=("Comic Sans", 20),
                         fg="White",
                         background="#20A5C9",
@@ -161,12 +168,12 @@ def clickProfile (patientInfo): # shows the user profile
 def clickRecommand (): # recommending on drug to a sick user
     print ("recommending on drugs to a sick user")
 
-def addDrugs(druglist, window, drugsInfoDic, patientInfo):
+def addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs):
     
     window.destroy()
     searchDrug(druglist)
     updatedrugsinfodic(drugsInfoDic, druglist)
-    mainMenu(druglist, drugsInfoDic, patientInfo)
+    mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo)
 
 
 def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
@@ -197,7 +204,7 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
      #button for schedule planning
     drugSearch = Button(frame, 
                            text="ADD DRUGS",
-                           command=lambda: addDrugs(druglist, window, drugsInfoDic, patientInfo),
+                           command=lambda: addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
@@ -211,7 +218,7 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
     
     showDrugs = Button(frame, 
                            text="DRUG LIST",
-                           command=lambda: showDrugList(druglist),
+                           command=lambda: showDrugList(druglist, historyDrugs),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",

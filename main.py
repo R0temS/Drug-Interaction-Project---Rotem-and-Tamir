@@ -70,4 +70,4 @@ except Exception:
     getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs)
 
 
-mainMenu(druglist, drugsInfoDic, patientInfo)
+mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo)
