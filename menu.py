@@ -34,11 +34,13 @@ def menu():
   #window.mainloop()
 
 #this function recieves an index of a drug in the drug list and removes it from there
-def removeDrug(druglist, index, historyDrugs):
+def removeDrug(druglist, index, historyDrugs, listWindow):
     if index.isdigit() == True:
-        if (int(index)>=0 and int(index)< len(druglist)):
+        if (int(index)>0 and int(index)<= len(druglist)):
             historyDrugs.append(druglist[int(index)-1])#the removed drug added to the history list
             druglist.pop(int(index)-1)
+            listWindow.destroy()
+            messagebox.showinfo(title='Success', message='DRUG REMOVED!')
         else:
             messagebox.showerror(title='Input error', message='CHOICE OUT OF RANGE!')
     else:
@@ -68,7 +70,7 @@ def showDrugList(druglist, historyDrugs):
         # creating button for removing a drug from the list to History section   
         remove = Button(listWindow,
                         text="Remove Drug",
-                        command=lambda: removeDrug(druglist, entrybox.get(), historyDrugs),
+                        command=lambda: removeDrug(druglist, entrybox.get(), historyDrugs, listWindow),
                         font=("Comic Sans", 20),
                         fg="White",
                         background="#20A5C9",
@@ -142,7 +144,17 @@ def clickHistory (historyDrugs): # opens a new window with the history details
         historyWindow = Tk()
         historyWindow.configure(bg='white')
         headline=Label(historyWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="----- MEDICINE HISTORY -----")
-        
+        textbox = Label(listWindow, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
+        text=""
+        count = 1
+        for i,j,d,w in druglist:
+            
+            text = text+"\n"+ str(count) + ". " + i+" -- rxcui: "+j
+            count+=1
+        textbox.configure(text=text)
+        headline.grid(row = 0, column =1, rowspan=2)
+        textbox.grid(row = 1, column =0, rowspan=4)
+
         previewsBtn = Button(historyWindow,
                      text="previews",
                      command= lambda: historyWindow.destory(),
@@ -151,10 +163,12 @@ def clickHistory (historyDrugs): # opens a new window with the history details
                      background="#20A5C9",
                      activebackground="#20A5C9",
                      activeforeground="White")
-        previewsBtn.grid(row=1, column=0, padx=10, ipadx=50)
+        previewsBtn.grid(row=2, column=0, padx=10, ipadx=50)
         historyWindow.mainloop()
     else:
         messagebox.showerror(message = "No history found!", title= "attention")
+
+
     
 def clickSchedule (): # creates a new schedule for the user
     print("creates new schedule")
