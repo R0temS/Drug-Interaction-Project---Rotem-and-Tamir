@@ -37,7 +37,7 @@ def menu():
 def removeDrug(druglist, index, historyDrugs):
     if index.isdigit() == True:
         if (int(index)>=0 and int(index)< len(druglist)):
-            historyDrugs.append(druglist[int(index)-1])
+            historyDrugs.append(druglist[int(index)-1])#the removed drug added to the history list
             druglist.pop(int(index)-1)
         else:
             messagebox.showerror(title='Input error', message='CHOICE OUT OF RANGE!')
