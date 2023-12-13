@@ -43,7 +43,19 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
     c.execute('SELECT allergies FROM info')
     allergies = c.fetchall()
    
-    patientInfo.update({'firstName': str(firstName)[3:-4], 'lastName': str(lastName)[3:-4], 'Age': str(age)[3:-4], 'Allergies': [], 'Background Dieseases': []})
+    patientInfo.update({'Allergies': [], 'Background Dieseases': []})
+    for firstName in firstName:
+        if str(firstName)[1:-2] != "None":
+            patientInfo.update({'firstName': str(firstName)[2:-3]})
+
+    for lastName in lastName:
+        if str(lastName)[1:-2] != "None":
+            patientInfo.update({'lastName': str(lastName)[2:-3]})
+
+    for age in age:
+        if str(age)[1:-2] != "None":
+            patientInfo.update({'Age': str(age)[2:-3]})
+
     for bgilnesses in bgilnesses:
         if str(bgilnesses)[1:-2] != "None":
             patientInfo['Background Dieseases'].append(str(bgilnesses)[2:-3])
@@ -96,12 +108,12 @@ def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, mode):
             c.execute('INSERT INTO info (firstName, lastName, age) VALUES (?, ?, ?)', ( patientInfo['firstName'], patientInfo['lastName'], patientInfo['Age']))
             if len(patientInfo['Allergies'])!=0:
                 for allergy in patientInfo['Allergies']:
-                    c.execute('INSERT INTO info (allergies) VALUES (?)', (allergy))
+                    c.execute('INSERT INTO info (allergies) VALUES (?)', (allergy, ))
            
             
             if len(patientInfo['Background Dieseases'])!=0:
                 for bgilnesses in patientInfo['Background Dieseases']:
-                    c.execute('INSERT INTO info (bgilnesses) VALUES (?)', (bgilnesses))
+                    c.execute('INSERT INTO info (bgilnesses) VALUES (?)', (bgilnesses, ))
             
             
          

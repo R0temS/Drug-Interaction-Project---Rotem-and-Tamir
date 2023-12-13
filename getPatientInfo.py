@@ -168,7 +168,7 @@ def allergiesInsert(patientInfo, firstName, lastName, Age, info):
     
     # handling age
     try:
-        age = int(Age)
+        int(Age)
         #patientInfo.update({'Age':age})
     except Exception:
         messagebox.showinfo(title='Input error', message='ENTER ONLY INTEGERS!')
