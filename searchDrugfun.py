@@ -59,13 +59,22 @@ def searchDrug(druglist):
                         optionsWindow.configure(bg='white')
                         headline=Label(optionsWindow, text=f"Options available for {drugSearch}:", font=('Ariel',40,'bold'), bg='white')
                         headline.grid(row=0, column=0)
-                        canvas=Canvas(background='white')
-                        frame=Frame(canvas, bg='white')
-                        canvas.create_window((50,50), window=frame, anchor="n", width=300, height=300)
+                        canvas=Canvas(background='white', width=1200)
+                        frame=Frame(canvas, bg='white', width=1200)
+                        canvas.create_window((150,50), window=frame, anchor="n")
                         canvas.bind_all("<MouseWheel>", on_canvas_scroll)
+                        frame.bind("<Configure>", on_frame_configure)
+                        canvas.bind("<Configure>", on_frame_configure)
                         canvas.grid(row=1, column=0)
                         for j in i['conceptProperties']:
-                             btn=Button(frame, text=f"{count}. {j['name']}  rxcui - {j['rxcui']}", command=lambda count=count-1: choiceFun(count), anchor='e')
+                             btn=Button(frame,
+                                       text=f"{count}. {j['name']}  rxcui - {j['rxcui']}",
+                                      command=lambda count=count-1: choiceFun(count), 
+                                      anchor='e', font=("Comic Sans", 12),
+                                        fg="White",
+                                     background="#20A5C9",
+                                        activebackground="#20A5C1",
+                                     activeforeground="White",)
                              btn.grid(padx=20,pady=5, row=count, column=0)
                              
                              count +=1

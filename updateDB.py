@@ -121,7 +121,6 @@ def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, mode):
             c.execute('DELETE FROM drugsInfo') #initializing the table values
             
             if len(drugsInfoDic['druginfo'])!=0:
-                print(drugsInfoDic)
                 for item in drugsInfoDic['druginfo']:
                     c.execute('INSERT INTO drugsInfo (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION) VALUES (?, ?, ?, ?, ?)', (item['rxcui'], item['drugName'], item['INDICATION AND USAGE'], item['WARNINGS'], item['DOSAGE AND ADMINISTRATION']))
             
