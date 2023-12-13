@@ -123,11 +123,10 @@ def getInfoSubmit(choice, druglist, entrybox, listWindow, drugsInfodic):
         return
     else:
         choice -=1
-        listWindow.destroy()
         getInfo(druglist[choice][1], "p", drugsInfodic, druglist[choice][0], 0, listWindow)
 
 
-def drugInfo(druglist, drugsInfodic, window):
+def drugInfo(druglist, drugsInfodic, window, patientInfo):
     if(len(druglist)!=0):
         window.destroy()
         listWindow = Tk()
@@ -135,10 +134,46 @@ def drugInfo(druglist, drugsInfodic, window):
         headline=Label(listWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="-----DRUG LIST-----")
         textbox = Label(listWindow, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
         entrybox = Entry(listWindow, width=30)
-        label = Label(listWindow, text = "Which Drug?")
+        label = Label(listWindow, text = "Info of Which Drug?", font=("Comic Sans", 20), bg="White", fg="black")
         pick = Button(listWindow, 
                            text="Submit",
                            command=lambda: getInfoSubmit(entrybox.get(), druglist, entrybox, listWindow, drugsInfodic),
+                           font=("Comic Sans", 20),
+                           fg="White",
+                           background="#20A5C9",
+                           activebackground="#20A5C1",
+                           activeforeground="White",
+                           state=ACTIVE,
+                           compound='bottom',
+                           padx=10,
+                           pady=10, width=25)
+        relevantallergy = Button(listWindow, 
+                           text="Relevant allergy info",
+                           command=lambda: relevantAllergy(listWindow, drugsInfodic, patientInfo),
+                           font=("Comic Sans", 20),
+                           fg="White",
+                           background="#20A5C9",
+                           activebackground="#20A5C1",
+                           activeforeground="White",
+                           state=ACTIVE,
+                           compound='bottom',
+                           padx=10,
+                           pady=10, width=25)
+        relevantbgillness = Button(listWindow, 
+                           text="Relevant dieseases info",
+                           command=lambda: relevantBGillness(listWindow, drugsInfodic, patientInfo),
+                           font=("Comic Sans", 20),
+                           fg="White",
+                           background="#20A5C9",
+                           activebackground="#20A5C1",
+                           activeforeground="White",
+                           state=ACTIVE,
+                           compound='bottom',
+                           padx=10,
+                           pady=10, width=25)
+        back = Button(listWindow, 
+                           text="Back to menu",
+                           command=lambda: listWindow.destroy(),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
@@ -155,11 +190,14 @@ def drugInfo(druglist, drugsInfodic, window):
             text = text+"\n"+ str(count) + ". " + i+" -- rxcui: "+j
             count+=1
         textbox.configure(text=text)
-        headline.grid(row=0, column=0)
-        textbox.grid(row=1, column=0)
+        headline.grid(row=0, column=0, columnspan=3)
+        textbox.grid(row=1, column=0, columnspan=3)
         label.grid(row=2, column=0)
         entrybox.grid(row=2, column=1)
         pick.grid(row=2, column=2)
+        relevantallergy.grid(row=3, column=0)
+        relevantbgillness.grid(row=3, column=1)
+        back.grid(row=3, column=2)
        
         listWindow.mainloop()
     else:
@@ -374,7 +412,7 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
 
     druginfo = Button(frame,
                            text="DRUG INFO",
-                           command= lambda: drugInfo(druglist, drugsInfoDic, window),
+                           command= lambda: drugInfo(druglist, drugsInfoDic, window, patientInfo),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
