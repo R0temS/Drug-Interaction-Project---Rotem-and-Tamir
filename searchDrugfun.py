@@ -51,28 +51,23 @@ def searchDrug(druglist):
                  for i in data['drugGroup']['conceptGroup']:
         
                      if (i['tty'] == 'SBD' and len(i) >1):
-                        def on_frame_configure(event):
-                            canvas.configure(scrollregion=canvas.bbox("all"))
                         def on_canvas_scroll(event):
                             canvas.yview_scroll(int(-1 * (event.delta / 60)), "units")
                         count = 1
-                        headline=Label(optionsWindow, text=f"Options available for {drugSearch}:", font=('Ariel',40,'bold'))
-                        headline.pack(side='top')
+                        optionsWindow.configure(bg='white')
+                        headline=Label(optionsWindow, text=f"Options available for {drugSearch}:", font=('Ariel',40,'bold'), bg='white')
+                        headline.grid(row=0, column=0)
                         canvas=Canvas(background='white')
                         frame=Frame(canvas, bg='white')
-                        canvas.create_window((0,0), window=frame, anchor="n")
-                        scrollBar= Scrollbar(frame, orient='vertical', command= canvas.yview)
+                        canvas.create_window((50,50), window=frame, anchor="n", width=300, height=300)
                         canvas.bind_all("<MouseWheel>", on_canvas_scroll)
-                        scrollBar.pack(side=RIGHT, fill="y", anchor='nw')
-                        frame.bind("<Configure>", on_frame_configure)
-                        canvas.bind("<Configure>", on_frame_configure)
-                        canvas.pack(fill="both",anchor="center" ,expand=True)
+                        canvas.grid(row=1, column=0)
                         for j in i['conceptProperties']:
-                             btn=Button(frame, text=f"{count}. {j['name']}  rxcui - {j['rxcui']}", command=lambda count=count-1: choiceFun(count))
-                             btn.pack(padx=20,pady=5)
+                             btn=Button(frame, text=f"{count}. {j['name']}  rxcui - {j['rxcui']}", command=lambda count=count-1: choiceFun(count), anchor='e')
+                             btn.grid(padx=20,pady=5, row=count, column=0)
                              
                              count +=1
-                        canvas.configure(yscrollcommand=scrollBar.set)
+                        canvas.configure()
                  optionsWindow.mainloop()
 
              else:messagebox.showinfo(title="Search alert",message="NO DATA FOUND!")
