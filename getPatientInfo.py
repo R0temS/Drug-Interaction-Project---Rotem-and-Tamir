@@ -7,68 +7,6 @@
 ##-A list of background diseases
 
 ##showPatientInfo function shows all of the information described above from the patientInfo dictionary
-#def getPatientInfo(patientInfo):
-#    patientInfo.update({'Name':input("Enter your name: ").capitalize()})
-#    age="a"
-#    while age=="a":
-#        try:
-#            age = int(input("Enter your age: "))
-#            patientInfo.update({'Age':age})
-#        except Exception:
-#            print("\nENTER ONLY INTEGERS!\n")
-#    allergy = "a"
-#    while allergy!="":
-#        if patientInfo.get('Allergies') == None:
-#            allergy= input("Enter substances you are allergic to (leave empty to continue): ").lower()
-#            if allergy !="":
-#                str = "https://rxnav.nlm.nih.gov/REST/spellingsuggestions.json?name=" + allergy
-#                data =req.get(str).json()
-#                if (len(data['suggestionGroup']['suggestionList']) == 1):
-#                    allergy = data['suggestionGroup']['suggestionList']['suggestion'][len(data['suggestionGroup']['suggestionList']['suggestion'])-1]
-#                else:
-#                    print("\nSUBSTANCE NOT FOUND!\n")
-#                    allergy="N/A"
-#            if allergy !="" and allergy!="N/A":
-#                patientInfo.update({'Allergies':[allergy]})
-#        elif allergy!="":
-#            allergy= input("Enter substances you are allergic to (leave empty to continue): ").lower()
-#            if allergy !="":
-#                str = "https://rxnav.nlm.nih.gov/REST/spellingsuggestions.json?name=" + allergy
-#                data =req.get(str).json()
-#                if (len(data['suggestionGroup']['suggestionList']) != 0):
-#                        allergy = data['suggestionGroup']['suggestionList']['suggestion'][len(data['suggestionGroup']['suggestionList']['suggestion'])-1]
-#                else:
-#                        print("\nSUBSTANCE NOT FOUND!\n")
-#                        allergy="N/A"
-#                if allergy !="" and allergy!="N/A":
-#                    if checkForDuplicatePatientInfo("allergy", allergy, patientInfo) == False:
-#                        patientInfo['Allergies'].append(allergy)
-    
-#    backgroundDisease = "a"
-#    while backgroundDisease!="":
-#        if patientInfo.get('Background Dieseases') == None:
-#            backgroundDisease= input("Enter your background Dieseases (leave empty to continue): ").lower()
-#            if backgroundDisease!="":
-#                patientInfo.update({'Background Dieseases':[backgroundDisease]})
-#        else:
-#            backgroundDisease= input("Enter your background Dieseases (leave empty to continue): ").lower()
-#            if backgroundDisease !="":
-#                if checkForDuplicatePatientInfo("background", backgroundDisease, patientInfo) == False:
-#                    patientInfo['Background Dieseases'].append(backgroundDisease)
-
-#def showPatientInfo(patientInfo):
-#    if patientInfo.get("Age")!=None:
-#        print(f"\nThe age of {patientInfo['Name']} is {patientInfo['Age']}")
-#    if patientInfo.get("Allergies")!=None:
-#        print(f"{patientInfo['Name']} has alergies to:")
-#        for allergy in patientInfo['Allergies']:
-#            print("- "+allergy)
-#        print("")
-#    if patientInfo.get("Background Dieseases")!=None:
-#        print(f"{patientInfo['Name']} has the following background dieseases:")
-#        for brd in patientInfo['Background Dieseases']:
-#            print("- "+brd)
-#        print("")
 
 from turtle import title
 from menu import *
@@ -85,7 +23,17 @@ def updatepatientInfo(patientInfo,firstName, lastName, Age, bgillnessWindow):
     bgillnessWindow.destroy()
     updateDB("", "", patientInfo, "", "patientinfo")
 
+def deleteAllergies(patientInfo, window):
+    patientInfo.update({'Allergies': []})
+    updateDB("", "", patientInfo, "", "patientinfo")
+    window.destroy()
+    messagebox.showinfo(title="Success", message="All of the allergies deleted")
 
+def deletebgIllness(patientInfo, window):
+    patientInfo.update({'Background Dieseases': []})
+    updateDB("", "", patientInfo, "", "patientinfo")
+    window.destroy()
+    messagebox.showinfo(title="Success", message="All of the background dieseases deleted")
 
 
 def addAllergy(patientInfo, allergy, allergybox):
@@ -330,6 +278,34 @@ def reviewProfile(patientInfo):##!!!!!need to be taken from the patientInfo dict
                  padx=10,
                  pady=10, width=25)
     add.grid(row=3, column=0)
+
+    deleteallergies = Button(reviewInfo,
+                 command= lambda: deleteAllergies(patientInfo, reviewInfo),
+                 text="DELETE ALLERGIES",       
+                 font=("Comic Sans", 20),
+                 fg="White",
+                 background="#20A5C9",
+                 activebackground="#20A5C9",
+                 activeforeground="White",
+                 state=ACTIVE,
+                 compound='bottom',
+                 padx=10,
+                 pady=10, width=25)
+    deleteallergies.grid(row=2, column=0)
+
+    deletebgillness = Button(reviewInfo,
+                 command= lambda: deletebgIllness(patientInfo, reviewInfo),
+                 text="DELETE BG DIESEASES",       
+                 font=("Comic Sans", 20),
+                 fg="White",
+                 background="#20A5C9",
+                 activebackground="#20A5C9",
+                 activeforeground="White",
+                 state=ACTIVE,
+                 compound='bottom',
+                 padx=10,
+                 pady=10, width=25)
+    deletebgillness.grid(row=2, column=1)
     
     back = Button(reviewInfo,
                  command= lambda: reviewInfo.destroy(),
@@ -346,5 +322,3 @@ def reviewProfile(patientInfo):##!!!!!need to be taken from the patientInfo dict
     back.grid(row=3, column=1)
     
     reviewInfo.mainloop()
-
-    print(patientInfo)

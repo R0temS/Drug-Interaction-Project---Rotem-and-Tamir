@@ -1,7 +1,10 @@
+from tkinter import *
+from tkinter import messagebox
+
 #checkAllergy function recieves the drugsInfoDic and patientInfo dictionaries and prints the relevent information from drugsInfoDic that contains the allergy name and the word 'allergy'
 #
 #checkBackgroundDiesease function recieves the drugsInfoDic and patientInfo dictionaries and prints the relevent information from drugsInfoDic that contains the diesease name
-def checkAllergy(drugsInfoDic, patientInfo):
+def checkAllergy(drugsInfoDic, patientInfo, window):
     lst=[]
         
     try:    
@@ -52,16 +55,39 @@ def checkAllergy(drugsInfoDic, patientInfo):
                         lst.append(f"RELEVANT DOSAGE AND ADMINISTRATION --- BETWEEN DRUG - {drug['drugName']} - AND SUBSTANCE - {allergy}\n\n{finalsentence}\n")
                 except Exception:
                     pass
-            if len(lst)!=0:
-                print("---ITEMS THAT ARE RELEVANT TO ALLERGIES---\n")
-                for item in lst:
-                    print(item)
-            else:
-                print("NO INFORMATION THAT IS RELEVANT TO BACKGROUND DIESEASES FOUND")
+        if len(lst)!=0:
+            infoWindow=Tk()
+            infoWindow.configure(bg='white')
+            headline=Label(infoWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="---ITEMS THAT ARE RELEVANT TO ALLERGIES---")
+            headline.grid(row=0, column=0)
+            text1=Text(infoWindow, font=('Ariel', 12))
+            text=""
+            for item in lst:
+                text = text + item
+            
+            text1.insert(1.0, text)
+            text1.grid(row=1, column=0)
+            back = Button(infoWindow,
+                        text="Back to menu",
+                        command = lambda: infoWindow.destroy(),
+                        font=("Comic Sans", 20),
+                        fg="White",
+                        background="#20A5C9",
+                        activebackground="#20A5C1",
+                        activeforeground="White",
+                        state=ACTIVE,
+                        compound='bottom',
+                        padx=10,
+                        pady=10, width=25) 
+            back.grid(row=3, column=0)
+            window.destroy()
+            infoWindow.mainloop()            
+        else:
+                messagebox.showinfo(title="Alert",message="NO INFORMATION THAT IS RELEVANT TO ALLERGIES WAS FOUND")
     except Exception:
-        print("NO ALLERGIES IN THE LIST!")
+        messagebox.showinfo(title="Alert",message="NO ALLERGIES IN THE LIST!")
 
-def checkBackgroundDiesease(drugsInfoDic, patientInfo):
+def checkBackgroundDiesease(drugsInfoDic, patientInfo, window):
     lst=[]
     try:
         for diesease in patientInfo['Background Dieseases']:
@@ -96,14 +122,38 @@ def checkBackgroundDiesease(drugsInfoDic, patientInfo):
                          lst.append(f"RELEVANT DOSAGE AND ADMINISTRATION --- BETWEEN DRUG - {drug['drugName']} - AND DIESEASE - {diesease}\n\n{relevant}\n")
                 except Exception:
                     pass
-            if len(lst)!=0:
-                print("---ITEMS THAT ARE RELEVANT TO BACKGROUND DIESEASES---\n")
-                for item in lst:
-                    print(item)
-            else:
-                print("NO INFORMATION THAT IS RELEVANT TO BACKGROUND DIESEASES FOUND")
+        if len(lst)!=0:
+            infoWindow=Tk()
+            infoWindow.configure(bg='white')
+            headline=Label(infoWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="---ITEMS THAT ARE RELEVANT TO BACKGROUND DIESEASES---")
+            headline.grid(row=0, column=0)
+            text1=Text(infoWindow, font=('Ariel', 12))
+            text=""
+            for item in lst:
+                text = text + item
+            
+            text1.insert(1.0, text)
+            text1.grid(row=1, column=0)
+            back = Button(infoWindow,
+                        text="Back to menu",
+                        command = lambda: infoWindow.destroy(),
+                        font=("Comic Sans", 20),
+                        fg="White",
+                        background="#20A5C9",
+                        activebackground="#20A5C1",
+                        activeforeground="White",
+                        state=ACTIVE,
+                        compound='bottom',
+                        padx=10,
+                        pady=10, width=25) 
+            back.grid(row=3, column=0)
+            window.destroy()
+            infoWindow.mainloop()            
+        else:
+                messagebox.showinfo(title="Alert",message="NO INFORMATION THAT IS RELEVANT TO BACKGROUND DIESEASES WAS FOUND")
     except Exception:
-        print("NO BACKGROUND DIESEASES IN THE LIST!")
+        messagebox.showinfo(title="Alert",message="NO BACKGROUND DIESEASES IN THE LIST!")
+        
 
         
         

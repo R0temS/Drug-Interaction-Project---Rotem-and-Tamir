@@ -9,11 +9,6 @@ from tkinter import messagebox
 #updatedrugsinfodic function updates the drugsInfoDic for all of the drugs in the druglist
 #
 #findLocationInDrugsInfoDic function finds if a info item is available for a specific drug and returns the location. if not found returns -1 
-def relevantAllergy(listWindow, drugsInfodic, patientInfo):
-    listWindow.destroy()
-
-def relevantBGillness(listWindow, drugsInfodic, patientInfo):
-    listWindow.destroy()
 
 def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc, listWindow):
     endpoint = "https://api.fda.gov/drug/label.json"

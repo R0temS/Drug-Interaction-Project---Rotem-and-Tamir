@@ -55,11 +55,7 @@ def removeDrug(druglist, index, historyDrugs, listWindow, drugsInfoDic):
     else:
         messagebox.showerror(title='Input error', message='ENTER ONLY INTEGERS!')
     
-    
-    
-    print(druglist)
-    print(len(druglist))
-    print(historyDrugs)    
+       
 
 def showDrugList(druglist, historyDrugs, drugsInfoDic):
     if(len(druglist)!=0):
@@ -149,7 +145,7 @@ def drugInfo(druglist, drugsInfodic, window, patientInfo):
                            pady=10, width=25)
         relevantallergy = Button(listWindow, 
                            text="Relevant allergy info",
-                           command=lambda: relevantAllergy(listWindow, drugsInfodic, patientInfo),
+                           command=lambda: checkAllergy(drugsInfodic, patientInfo, listWindow),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
@@ -161,7 +157,7 @@ def drugInfo(druglist, drugsInfodic, window, patientInfo):
                            pady=10, width=25)
         relevantbgillness = Button(listWindow, 
                            text="Relevant dieseases info",
-                           command=lambda: relevantBGillness(listWindow, drugsInfodic, patientInfo),
+                           command=lambda: checkBackgroundDiesease(drugsInfodic, patientInfo, listWindow),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
@@ -241,7 +237,7 @@ def clickWarnings (allDrugs): # shows the relevant warnings for the user
     drugInteraction(allDrugs)
     
 def clickProfile (patientInfo): # shows the user profile
-   reviewProfile(patientInfo) 
+    reviewProfile(patientInfo) 
     
 def clickRecommand (): # recommending on drug to a sick user
     print ("recommending on drugs to a sick user")
