@@ -51,6 +51,8 @@ def searchDrug(druglist):
                  for i in data['drugGroup']['conceptGroup']:
         
                      if (i['tty'] == 'SBD' and len(i) >1):
+                        def on_frame_configure(event):
+                            canvas.configure(scrollregion=canvas.bbox("all"))
                         def on_canvas_scroll(event):
                             canvas.yview_scroll(int(-1 * (event.delta / 60)), "units")
                         count = 1
