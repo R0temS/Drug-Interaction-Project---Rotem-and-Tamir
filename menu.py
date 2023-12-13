@@ -1,3 +1,5 @@
+#11/12 - i added the clickHistory function and tried to add the remove drug button - need to recheck it
+
 #menu function prints the main menu
 #showDrugList prints the drugs in druglist
 from tkinter import *
@@ -31,6 +33,13 @@ def menu():
 
   #window.mainloop()
 
+#this function recieves an index of a drug in the drug list and removes it from there
+def removeDrug(druglist, index):
+    druglist.pop(int(index)-1)
+    updateDB(druglist, "", "", "", "druglist")  # updating the DB
+    print(druglist)
+    
+
 def showDrugList(druglist):
     if(len(druglist)!=0):
         listWindow = Tk()
@@ -46,6 +55,23 @@ def showDrugList(druglist):
         textbox.configure(text=text)
         headline.pack(anchor='n')
         textbox.pack(anchor='nw')
+        
+        entrybox = Entry(listWindow, width=30)
+        entrybox.pack()
+        # creating button for removing a drug from the list to History section   
+        remove = Button(listWindow,
+                        text="Remove Drug",
+                        command=lambda: removeDrug(druglist, entrybox.get()),
+                        font=("Comic Sans", 20),
+                        fg="White",
+                        background="#20A5C9",
+                        activebackground="#20A5C1",
+                        activeforeground="White",
+                        state=ACTIVE,
+                        compound='bottom',
+                        padx=10,
+                        pady=10, width=25) 
+        remove.pack()
         listWindow.mainloop()
     else:
         messagebox.showerror(message = "Insert drugs first!", title= "alert")
@@ -99,13 +125,29 @@ def drugInfo(druglist, drugsInfodic, window):
         label.grid(row=2, column=0)
         entrybox.grid(row=2, column=1)
         pick.grid(row=2, column=2)
-
+       
         listWindow.mainloop()
     else:
         messagebox.showerror(message = "Insert drugs first!", title= "alert")
 
-def clickHistory (): # opens a new window with the history details
-    print("showing history")
+def clickHistory (historyDrugs): # opens a new window with the history details
+    if(len(historyDrugs)!=0):
+        historyWindow = Tk()
+        historyWindow.configure(bg='white')
+        headline=Label(historyWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="----- MEDICINE HISTORY -----")
+        
+        previewsBtn = Button(historyWindow,
+                     text="previews",
+                     command= lambda: historyWindow.destory(),
+                     font=("Comic Sans", 16),
+                     fg="White",
+                     background="#20A5C9",
+                     activebackground="#20A5C9",
+                     activeforeground="White")
+        previewsBtn.grid(row=1, column=0, padx=10, ipadx=50)
+        historyWindow.mainloop()
+    else:
+        messagebox.showerror(message = "No history found!", title= "attention")
     
 def clickSchedule (): # creates a new schedule for the user
     print("creates new schedule")
@@ -127,7 +169,7 @@ def addDrugs(druglist, window, drugsInfoDic, patientInfo):
     mainMenu(druglist, drugsInfoDic, patientInfo)
 
 
-def mainMenu(druglist, drugsInfoDic, patientInfo):
+def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
     window = Tk()
     window.title("Drug Management System")
     window.geometry("1000x500")
@@ -200,7 +242,7 @@ def mainMenu(druglist, drugsInfoDic, patientInfo):
     #button for showing drug usage history
     showHistory = Button(frame, 
                            text="HISTORY",
-                           command=clickHistory,
+                           command= lambda: clickHistory(historyDrugs),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
