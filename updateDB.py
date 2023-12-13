@@ -45,10 +45,12 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
    
     patientInfo.update({'firstName': str(firstName)[3:-4], 'lastName': str(lastName)[3:-4], 'Age': str(age)[3:-4], 'Allergies': [], 'Background Dieseases': []})
     for bgilnesses in bgilnesses:
-        patientInfo['Background Dieseases'].append(bgilnesses)
+        if str(bgilnesses)[1:-2] != "None":
+            patientInfo['Background Dieseases'].append(str(bgilnesses)[2:-3])
 
     for allergies in allergies:
-        patientInfo['Allergies'].append(allergies)
+        if str(allergies)[1:-2] != "None":
+            patientInfo['Allergies'].append(str(allergies)[2:-3])
 
 
     #drugs information dic
@@ -66,7 +68,7 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
 
     drugsInfoDic.update({"druginfo": []})
     for rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION in zip (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION):
-        drugsInfoDic['druginfo'].append({"rxcui": rxcui, "drugName": drugName, "INDICATION_AND_USAGE": INDICATION_AND_USAGE, "WARNINGS": WARNINGS, "DOSAGE_AND_ADMINISTRATION": DOSAGE_AND_ADMINISTRATION})
+        drugsInfoDic['druginfo'].append({"rxcui": str(rxcui)[2:-3], "drugName": str(drugName)[2:-3], "INDICATION AND USAGE": str(INDICATION_AND_USAGE)[2:-3], "WARNINGS": str(WARNINGS)[2:-3], "DOSAGE AND ADMINISTRATION": str(DOSAGE_AND_ADMINISTRATION)[2:-3]})
     
     conn.close()
     
@@ -76,31 +78,40 @@ def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, mode):
         c = conn.cursor()
        
         if mode == "druglist":
-            c.execute('UPDATE druglist SET drugname = NULL, drugrxcui = NULL, perweek = NULL, perday = NULL')  #initializing the table values
-
-            for drugname, drugrxcui, perweek, perday in druglist:
-                    c.execute('INSERT INTO drugList (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
+            c.execute('DELETE FROM druglist') #initializing the table values
+            
+            if len(druglist)!=0:
+                for drugname, drugrxcui, perweek, perday in druglist:
+                        c.execute('INSERT INTO drugList (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
 
         if mode == "drughistory":
-            c.execute('UPDATE historyDrugs SET drugname = NULL, drugrxcui = NULL, perweek = NULL, perday = NULL')  #initializing the table values
+            c.execute('DELETE FROM historyDrugs') #initializing the table values
 
-            for drugname, drugrxcui, perweek, perday in historyDrugs:
-                    c.execute('INSERT INTO historyDrugs (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
+            if len(historyDrugs)!=0:
+                for drugname, drugrxcui, perweek, perday in historyDrugs:
+                        c.execute('INSERT INTO historyDrugs (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
         
         if mode == "patientinfo":
-            c.execute('UPDATE info SET firstName = NULL, lastName = NULL, age = NULL, bgilnesses = NULL, allergies = NULL')  #initializing the table values
+            c.execute('DELETE FROM info') #initializing the table values
             c.execute('INSERT INTO info (firstName, lastName, age) VALUES (?, ?, ?)', ( patientInfo['firstName'], patientInfo['lastName'], patientInfo['Age']))
-            for allergy in patientInfo['Allergies']:
-                c.execute('INSERT INTO info (allergies) VALUES (?)', (allergy))
-
-            for bgilnesses in patientInfo['Background Dieseases']:
-                c.execute('INSERT INTO info (bgilnesses) VALUES (?)', (bgilnesses))
+            if len(patientInfo['Allergies'])!=0:
+                for allergy in patientInfo['Allergies']:
+                    c.execute('INSERT INTO info (allergies) VALUES (?)', (allergy))
+           
+            
+            if len(patientInfo['Background Dieseases'])!=0:
+                for bgilnesses in patientInfo['Background Dieseases']:
+                    c.execute('INSERT INTO info (bgilnesses) VALUES (?)', (bgilnesses))
+            
             
          
         if mode == "druginfo":
-            c.execute('UPDATE drugsInfo SET rxcui = NULL, drugName = NULL, INDICATION_AND_USAGE = NULL, WARNINGS = NULL, DOSAGE_AND_ADMINISTRATION = NULL')  #initializing the table values
-            for item in drugsInfoDic['druginfo']:
-                c.execute('INSERT INTO drugsInfo (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION) VALUES (?, ?, ?, ?, ?)', (item['rxcui'], item['drugName'], item['INDICATION AND USAGE'], item['WARNINGS'], item['DOSAGE AND ADMINISTRATION']))
+            c.execute('DELETE FROM drugsInfo') #initializing the table values
+            
+            if len(drugsInfoDic['druginfo'])!=0:
+                print(drugsInfoDic)
+                for item in drugsInfoDic['druginfo']:
+                    c.execute('INSERT INTO drugsInfo (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION) VALUES (?, ?, ?, ?, ?)', (item['rxcui'], item['drugName'], item['INDICATION AND USAGE'], item['WARNINGS'], item['DOSAGE AND ADMINISTRATION']))
             
         conn.commit()           
         conn.close()

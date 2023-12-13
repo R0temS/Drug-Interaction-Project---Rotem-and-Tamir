@@ -69,5 +69,5 @@ try:
 except Exception:
     getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs)
 
-
-mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo)
+while True:
+    mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo)

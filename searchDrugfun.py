@@ -9,7 +9,6 @@ from updateDB import *
 def searchDrug(druglist):
     def skip():
         drugWindow.destroy()
-        updateDB(druglist, "", "", "", "druglist")
         ## need to add update hisory function
     def drugOptions():
         try:

@@ -33,23 +33,35 @@ def menu():
 
   #window.mainloop()
 
+
+def destroyWindow(Window):
+    Window.destroy()
 #this function recieves an index of a drug in the drug list and removes it from there
-def removeDrug(druglist, index, historyDrugs, listWindow):
+def removeDrug(druglist, index, historyDrugs, listWindow, drugsInfoDic):
     if index.isdigit() == True:
         if (int(index)>0 and int(index)<= len(druglist)):
             historyDrugs.append(druglist[int(index)-1])#the removed drug added to the history list
+            drugfordelete1 = findLocationInDrugsInfoDic(druglist, drugsInfoDic, int(index)-1)
             druglist.pop(int(index)-1)
+            if drugfordelete1!=-1:
+                 drugsInfoDic['druginfo'].pop(drugfordelete1)
             listWindow.destroy()
             messagebox.showinfo(title='Success', message='DRUG REMOVED!')
+            updateDB(druglist, "", "", "", "druglist")  # updating the DB
+            updateDB("", drugsInfoDic, "", "", "druginfo")
+            updateDB("", "", "", historyDrugs, "drughistory")
         else:
             messagebox.showerror(title='Input error', message='CHOICE OUT OF RANGE!')
     else:
         messagebox.showerror(title='Input error', message='ENTER ONLY INTEGERS!')
-    updateDB(druglist, "", "", "", "druglist")  # updating the DB
-    print(druglist)
     
+    
+    
+    print(druglist)
+    print(len(druglist))
+    print(historyDrugs)    
 
-def showDrugList(druglist, historyDrugs):
+def showDrugList(druglist, historyDrugs, drugsInfoDic):
     if(len(druglist)!=0):
         listWindow = Tk()
         listWindow.configure(bg='white')
@@ -70,7 +82,7 @@ def showDrugList(druglist, historyDrugs):
         # creating button for removing a drug from the list to History section   
         remove = Button(listWindow,
                         text="Remove Drug",
-                        command=lambda: removeDrug(druglist, entrybox.get(), historyDrugs, listWindow),
+                        command=lambda: removeDrug(druglist, entrybox.get(), historyDrugs, listWindow, drugsInfoDic),
                         font=("Comic Sans", 20),
                         fg="White",
                         background="#20A5C9",
@@ -81,6 +93,19 @@ def showDrugList(druglist, historyDrugs):
                         padx=10,
                         pady=10, width=25) 
         remove.pack()
+        back = Button(listWindow,
+                        text="Back to menu",
+                        command=lambda: destroyWindow(listWindow),
+                        font=("Comic Sans", 20),
+                        fg="White",
+                        background="#20A5C9",
+                        activebackground="#20A5C1",
+                        activeforeground="White",
+                        state=ACTIVE,
+                        compound='bottom',
+                        padx=10,
+                        pady=10, width=25) 
+        back.pack()
         listWindow.mainloop()
     else:
         messagebox.showerror(message = "Insert drugs first!", title= "alert")
@@ -100,6 +125,7 @@ def getInfoSubmit(choice, druglist, entrybox, listWindow, drugsInfodic):
         choice -=1
         listWindow.destroy()
         getInfo(druglist[choice][1], "p", drugsInfodic, druglist[choice][0], 0, listWindow)
+
 
 def drugInfo(druglist, drugsInfodic, window):
     if(len(druglist)!=0):
@@ -144,10 +170,10 @@ def clickHistory (historyDrugs): # opens a new window with the history details
         historyWindow = Tk()
         historyWindow.configure(bg='white')
         headline=Label(historyWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="----- MEDICINE HISTORY -----")
-        textbox = Label(listWindow, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
+        textbox = Label(historyWindow, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
         text=""
         count = 1
-        for i,j,d,w in druglist:
+        for i,j,d,w in historyDrugs:
             
             text = text+"\n"+ str(count) + ". " + i+" -- rxcui: "+j
             count+=1
@@ -157,7 +183,7 @@ def clickHistory (historyDrugs): # opens a new window with the history details
 
         previewsBtn = Button(historyWindow,
                      text="previews",
-                     command= lambda: historyWindow.destory(),
+                     command= lambda: destroyWindow(historyWindow),
                      font=("Comic Sans", 16),
                      fg="White",
                      background="#20A5C9",
@@ -187,6 +213,8 @@ def addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs):
     window.destroy()
     searchDrug(druglist)
     updatedrugsinfodic(drugsInfoDic, druglist)
+    updateDB(druglist, "", "", "", "druglist")# updating the DB  
+    
     mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo)
 
 
@@ -232,7 +260,7 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
     
     showDrugs = Button(frame, 
                            text="DRUG LIST",
-                           command=lambda: showDrugList(druglist, historyDrugs),
+                           command=lambda: showDrugList(druglist, historyDrugs, drugsInfoDic),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
@@ -358,22 +386,6 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
                            pady=10,
                            width=25)
     druginfo.grid(column=2 , row=3, columnspan=2)
-    
-    # # DB creation
-    
-    # conn = sqlite3.connect('patient_info.db')
-    # # Create table
-    # conn.execute('''CREATE TABLE info(
-    #                  firstName text,
-    #                  lastName text,
-    #                  age integer,
-    #                  bgilnesses text,
-    #                  allergies text
-    #                  )''')
-    # # Commit Changes
-    # conn.commit()
-    # # Close connection
-    # conn.close()
     
     window.mainloop()
     
