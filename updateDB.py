@@ -93,14 +93,14 @@ def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, mode):
             c.execute('DELETE FROM druglist') #initializing the table values
             
             if len(druglist)!=0:
-                for drugname, drugrxcui, perweek, perday in druglist:
+                for drugname, drugrxcui, perday, perweek in druglist:
                         c.execute('INSERT INTO drugList (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
 
         if mode == "drughistory":
             c.execute('DELETE FROM historyDrugs') #initializing the table values
 
             if len(historyDrugs)!=0:
-                for drugname, drugrxcui, perweek, perday in historyDrugs:
+                for drugname, drugrxcui, perday, perweek in historyDrugs:
                         c.execute('INSERT INTO historyDrugs (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
         
         if mode == "patientinfo":

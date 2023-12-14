@@ -15,7 +15,7 @@ def searchDrug(druglist):
             optionsWindow.destroy()
         except Exception:
             pass
-        def choiceFun(loc):
+        def choiceFun(loc, i):
             if checkforduplicate(i['conceptProperties'][loc]['rxcui'], druglist) == False:
                 ##function of recieving the perday perweek
                 druglist.append([i['conceptProperties'][loc]['name'],i['conceptProperties'][loc]['rxcui'], "perday", "perweek"])
@@ -50,7 +50,7 @@ def searchDrug(druglist):
                  
                  for i in data['drugGroup']['conceptGroup']:
         
-                     if (i['tty'] == 'SBD' and len(i) >1):
+                     if (len(i) >1):#(i['tty'] == 'SBD' and 
                         def on_frame_configure(event):
                             canvas.configure(scrollregion=canvas.bbox("all"))
                         def on_canvas_scroll(event):
@@ -69,7 +69,7 @@ def searchDrug(druglist):
                         for j in i['conceptProperties']:
                              btn=Button(frame,
                                        text=f"{count}. {j['name']}  rxcui - {j['rxcui']}",
-                                      command=lambda count=count-1: choiceFun(count), 
+                                      command=lambda count=count-1, i=i: choiceFun(count,i), 
                                       anchor='e', font=("Comic Sans", 12),
                                         fg="White",
                                      background="#20A5C9",
