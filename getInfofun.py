@@ -14,7 +14,12 @@ def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc, listWindow):
     endpoint = "https://api.fda.gov/drug/label.json"
     params = {"search": f"openfda.rxcui:{drug_rxcui}"}
 
-    response = requests.get(endpoint, params=params)
+    try:
+        response = requests.get(endpoint, params=params)
+    except Exception:
+        messagebox.showerror(title="Search alert",message="COULD NOT CONNECT, CHECK YOUR INTERNET CONNECTION!")
+        return
+    
 
     if response.status_code == 200:
         data = response.json()
@@ -42,7 +47,7 @@ def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc, listWindow):
             infoWindow.configure(bg='white')
             headline=Label(infoWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="-----DRUG INFO-----")
             headline.grid(row=0, column=0)
-            text1=Text(infoWindow, font=('Ariel', 12))
+            text1=Text(infoWindow, font=('Ariel', 12), width=120, wrap=WORD, padx=20, pady=20)
             text1.insert(1.0, text)
             text1.grid(row=1, column=0)
             back = Button(infoWindow,

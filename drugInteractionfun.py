@@ -9,7 +9,7 @@ def checkInteractionDup(interactionlist, text):
 
     return False
 
-def drugInteraction(alldrugs):
+def drugInteraction(alldrugs, window):
     adress = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
     if len(alldrugs) != 0:
         if len(alldrugs)>0:
@@ -20,10 +20,6 @@ def drugInteraction(alldrugs):
 
 
         if (len(data)>1):
-            listWindow = Tk()
-            listWindow.configure(bg='white')
-            headline= Label(listWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="-----DRUG INTERACTIONS-----")
-            textbox = Label(listWindow, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
             text=""
             finaltext = ""
             count = 1
@@ -34,14 +30,31 @@ def drugInteraction(alldrugs):
                     if checkInteractionDup(interactionlist, text) == False:
                         interactionlist.append(text)
                         
-                        
+            infoWindow=Tk()
+            infoWindow.configure(bg='white')
+            headline=Label(infoWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="-----DRUG INTERACTIONS-----")
+            headline.grid(row=0, column=0)
+            text1=Text(infoWindow, font=('Ariel', 12), width=120, wrap=WORD, padx=20, pady=20)
             for texts in interactionlist:
                 finaltext = finaltext +"\n" + str(count) + texts
                 count+=1
-            textbox.configure(text=finaltext)
-            headline.pack(anchor='n')
-            textbox.pack(anchor='nw')
-            listWindow.mainloop()
+            text1.insert(1.0, finaltext)
+            text1.grid(row=1, column=0)
+            back = Button(infoWindow,
+                        text="Back to menu",
+                        command = lambda: infoWindow.destroy(),
+                        font=("Comic Sans", 20),
+                        fg="White",
+                        background="#20A5C9",
+                        activebackground="#20A5C1",
+                        activeforeground="White",
+                        state=ACTIVE,
+                        compound='bottom',
+                        padx=10,
+                        pady=10, width=25) 
+            back.grid(row=3, column=0)
+            window.destroy()
+            infoWindow.mainloop()                        
         else:
             messagebox.showerror(title="no interactions found", message="No interactions found!")
     else:

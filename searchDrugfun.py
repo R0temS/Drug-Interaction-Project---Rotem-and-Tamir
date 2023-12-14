@@ -1,3 +1,4 @@
+from ast import Try
 import requests as req
 import os
 from tkinter import *
@@ -28,7 +29,11 @@ def searchDrug(druglist):
             messagebox.showerror(title="entry error",message="Insert a drug name first!")
         else:
              str = "https://rxnav.nlm.nih.gov/REST/drugs.json?name=" + drugSearch
-             data = req.get(str).json()
+             try:
+                 data = req.get(str).json()
+             except Exception:
+                 messagebox.showerror(title="Search alert",message="COULD NOT CONNECT, CHECK YOUR INTERNET CONNECTION!")
+                 return
              
     
              if (len(data['drugGroup']) != 2):

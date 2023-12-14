@@ -233,8 +233,8 @@ def clickHistory (historyDrugs): # opens a new window with the history details
 def clickSchedule (): # creates a new schedule for the user
     print("creates new schedule")
     
-def clickWarnings (allDrugs): # shows the relevant warnings for the user
-    drugInteraction(allDrugs)
+def clickWarnings (allDrugs, window): # shows the relevant warnings for the user
+    drugInteraction(allDrugs, window)
     
 def clickProfile (patientInfo): # shows the user profile
     reviewProfile(patientInfo) 
@@ -342,7 +342,7 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
     #button for presenting relebant warnings for the user
     showWarnings = Button(frame, 
                            text="WARNINGS",
-                           command= lambda: clickWarnings(druglist),
+                           command= lambda: clickWarnings(druglist, window),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",

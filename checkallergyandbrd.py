@@ -60,7 +60,7 @@ def checkAllergy(drugsInfoDic, patientInfo, window):
             infoWindow.configure(bg='white')
             headline=Label(infoWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="---ITEMS THAT ARE RELEVANT TO ALLERGIES---")
             headline.grid(row=0, column=0)
-            text1=Text(infoWindow, font=('Ariel', 12))
+            text1=Text(infoWindow, font=('Ariel', 12), width=120, wrap=WORD, padx=20, pady=20)
             text=""
             for item in lst:
                 text = text + item
@@ -127,7 +127,7 @@ def checkBackgroundDiesease(drugsInfoDic, patientInfo, window):
             infoWindow.configure(bg='white')
             headline=Label(infoWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="---ITEMS THAT ARE RELEVANT TO BACKGROUND DIESEASES---")
             headline.grid(row=0, column=0)
-            text1=Text(infoWindow, font=('Ariel', 12))
+            text1=Text(infoWindow, font=('Ariel', 12), width=120, wrap=WORD, padx=20, pady=20)
             text=""
             for item in lst:
                 text = text + item
