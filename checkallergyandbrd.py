@@ -161,9 +161,9 @@ def checkBackgroundDiesease(drugsInfoDic, patientInfo, window):
   
 def loading(event):
    
-    def timer(event):
+    def timer(event, Text):
         count = 0
-        nonlocal Text
+        
         while not event.is_set():
             time.sleep(1)
             if count == 0:
@@ -176,11 +176,18 @@ def loading(event):
                 Text.config(text="LOADING...")
                 count = 0
         
+        
     
     waitingWindow = Tk()
     Text = Label(waitingWindow, text="LOADING",
                      bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center')
     Text.pack()
-    waitingWindow.mainloop()           
+    loading_thread = threading.Thread(target= lambda: timer(event, Text), daemon=True) # loading
+    loading_thread.start()  # loading
+    
+    waitingWindow.mainloop() 
+    
+    
+    
         
         
