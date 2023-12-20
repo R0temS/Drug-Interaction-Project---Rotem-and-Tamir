@@ -1,7 +1,8 @@
-#11/12 - i added the clickHistory function and tried to add the remove drug button - need to recheck it
+#17/12 - i added to the  click warnings function the list of warnings
 
 #menu function prints the main menu
 #showDrugList prints the drugs in druglist
+from cProfile import label
 from logging import warning
 from tkinter import *
 from tkinter import messagebox
@@ -15,6 +16,7 @@ from checkallergyandbrd import *
 import sqlite3 
 from drugInteractionfun import *
 from getPatientInfo import *
+
     
 def menu():
   print("\nChoose your preffered option:")
@@ -48,9 +50,9 @@ def removeDrug(druglist, index, historyDrugs, listWindow, drugsInfoDic):
                  drugsInfoDic['druginfo'].pop(drugfordelete1)
             listWindow.destroy()
             messagebox.showinfo(title='Success', message='DRUG REMOVED!')
-            updateDB(druglist, "", "", "", "druglist")  # updating the DB
-            updateDB("", drugsInfoDic, "", "", "druginfo")
-            updateDB("", "", "", historyDrugs, "drughistory")
+            updateDB(druglist, "", "", "", "","druglist")  # updating the DB
+            updateDB("", drugsInfoDic, "", "", "","druginfo")
+            updateDB("", "", "", historyDrugs, "","drughistory")
         else:
             messagebox.showerror(title='Input error', message='CHOICE OUT OF RANGE!')
     else:
@@ -237,7 +239,7 @@ def clickSchedule (): # creates a new schedule for the user
     print("creates new schedule")
     
 def clickWarnings (allDrugs, window, mode, warningList): # shows the relevant warnings for the user
-    drugInteraction(allDrugs, window, mode, warningList)
+    drugInteraction(allDrugs, window, "choose", warningList)
     
 def clickProfile (patientInfo): # shows the user profile
     reviewProfile(patientInfo) 
@@ -245,17 +247,16 @@ def clickProfile (patientInfo): # shows the user profile
 def clickRecommand (): # recommending on drug to a sick user
     print ("recommending on drugs to a sick user")
 
-def addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs):
+def addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs, inteructionWarnings):
     
     window.destroy()
     searchDrug(druglist)
     updatedrugsinfodic(drugsInfoDic, druglist)
-    updateDB(druglist, "", "", "", "druglist")# updating the DB  
+    updateDB(druglist, "", "", "", "","druglist")# updating the DB  
     
-    mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo)
-
-
-def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
+    mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarnings)
+           
+def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarnings):
     window = Tk()
     window.title("Drug Management System")
     window.geometry("1000x500")
@@ -283,7 +284,7 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
      #button for schedule planning
     drugSearch = Button(frame, 
                            text="ADD DRUGS",
-                           command=lambda: addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs),
+                           command=lambda: addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs, inteructionWarnings),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
@@ -345,7 +346,7 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo):
     #button for presenting relebant warnings for the user
     showWarnings = Button(frame, 
                            text="WARNINGS",
-                           command= lambda: clickWarnings(druglist, window, "print", []),
+                           command= lambda: clickWarnings(druglist, window, "print", inteructionWarnings),
                            font=("Comic Sans", 20),
                            fg="White",
                            background="#20A5C9",
