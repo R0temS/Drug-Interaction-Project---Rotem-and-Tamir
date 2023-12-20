@@ -1,6 +1,15 @@
+# 17/12 - imported the updateDB module in order to update the warning list after maping the interactions in the drug list.
+# also added the pre window when clicking on the warnings button in the GUI window. added submit button and function.
+from ast import Try
+from asyncio import events
+import re
 from tkinter import *
 from tkinter import messagebox
+from token import COMMA
 import requests as req
+from updateDB import * 
+from checkallergyandbrd import *
+
 # drugInteraction function recieves the druglist and prints all of the drug interactions
 def checkInteractionDup(interactionlist, text):
     for texts in interactionlist:
@@ -9,8 +18,45 @@ def checkInteractionDup(interactionlist, text):
 
     return False
 
+def submit(finalList, chooseDrugsWindow, window, mode, warningList, listbox, event):
+    for index in listbox.curselection():
+        #finalList.append(re.search("^The.*Spain$", (listbox.get(index)), listbox.get(index)[-7:]))
+        finalList.append([re.search(".*!", (listbox.get(index))).group()[:-1], re.search("!.*", (listbox.get(index))).group()[2:]])
+    chooseDrugsWindow.destroy()
+   
+    loading_thread = threading.Thread(target= lambda: loading(event), daemon=True) # loading
+    loading_thread.start()  # loading
+    drugInteraction(finalList, window, "print", warningList)
+    
+   
+   
 def drugInteraction(alldrugs, window, mode, warningList):
+    
+    if mode == "choose":
+
+        # new window for the user to pick the relevant drugs for interactions
+        chooseDrugsWindow = Tk()
+        listbox = Listbox(chooseDrugsWindow,
+                            selectmode="multiple",
+                            bg='white', 
+                            font=('Ariel', 18),
+                            width=12
+                            )
+        listbox.pack()
+        count = 1
+        finalList = []
+        for drug in alldrugs:
+            listbox.insert(count, f"{drug[0]}! {drug[1]}") 
+            count += 1
+        event = threading.Event() # loading
+        submitButton = Button(chooseDrugsWindow, text="submit", command=lambda: submit(finalList, chooseDrugsWindow, window, "", warningList, listbox, event))
+        submitButton.pack()     
+        chooseDrugsWindow.mainloop() 
     if mode == "print":
+            try:
+                event.set() # loading
+            except Exception:
+                pass    
             flag = False
             interactionlist = []  
             adress = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
@@ -37,6 +83,8 @@ def drugInteraction(alldrugs, window, mode, warningList):
                     if (flag == False):
                       messagebox.showerror(title="no interactions found", message="No interactions found!")             
                     else:
+                        #new window for showing interactions
+                        
                         infoWindow=Tk()
                         infoWindow.configure(bg='white')
                         headline=Label(infoWindow, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="-----DRUG INTERACTIONS-----")
@@ -90,6 +138,8 @@ def drugInteraction(alldrugs, window, mode, warningList):
                                                     if(j['severity']!= 'N/A'):
                                                         warningList.append([alldrugs[location1][0], alldrugs[location1][1], alldrugs[location2][0], alldrugs[location2][1]])
                                                     interactionlist.append(text)
+                                                   
+                    updateDB("", "", "", "", warningList, warningList)   # updating the DB                                     
                          
                                       
                                          
