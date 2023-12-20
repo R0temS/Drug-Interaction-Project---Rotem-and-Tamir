@@ -1,7 +1,8 @@
+# 17/12 - added to both functions the interactionWarnings list to update and retrieve information from
 import sqlite3
 
 #this function receives the information from the DB and updates the variables  
-def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
+def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs, inteructionWarnings):
     conn = sqlite3.connect('patient_info.db')
     c = conn.cursor()
 
@@ -82,10 +83,24 @@ def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs):
     for rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION in zip (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION):
         drugsInfoDic['druginfo'].append({"rxcui": str(rxcui)[2:-3], "drugName": str(drugName)[2:-3], "INDICATION AND USAGE": str(INDICATION_AND_USAGE)[2:-3], "WARNINGS": str(WARNINGS)[2:-3], "DOSAGE AND ADMINISTRATION": str(DOSAGE_AND_ADMINISTRATION)[2:-3]})
     
+    #drug inteructions
+
+    c.execute('SELECT drugAName FROM inteructionWarnings')
+    drug1Name = c.fetchall()
+    c.execute('SELECT drugARxcui FROM inteructionWarnings')
+    drug1Rxcui = c.fetchall()
+    c.execute('SELECT drugBName FROM inteructionWarnings')
+    drug2Name = c.fetchall()
+    c.execute('SELECT drugBRxcui FROM inteructionWarnings')
+    drug2Rxcui = c.fetchall()
+
+    for drug1Name, drug1Rxcui, drug2Name, drug2Rxcui in zip (drug1Name, drug1Rxcui, drug2Name, drug2Rxcui):
+        inteructionWarnings.append([str(drug1Name)[2:-3], str(drug1Rxcui)[2:-3], str(drug2Name)[2:-3], str(drug2Rxcui)[2:-3]])
+    
     conn.close()
     
 
-def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, mode):
+def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, inteructionWarnings, mode):
         conn = sqlite3.connect('patient_info.db')
         c = conn.cursor()
        
@@ -126,6 +141,17 @@ def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, mode):
                         c.execute('INSERT INTO drugsInfo (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION) VALUES (?, ?, ?, ?, ?)', (item['rxcui'], item['drugName'], item['INDICATION AND USAGE'], item['WARNINGS'], item['DOSAGE AND ADMINISTRATION']))
                   except Exception :
                       pass
-            
+        
+        if mode == "inteructionWarnings":
+            c.execute('DELETE FROM inteructionWarnings') #initializing the table values
+            if len(inteructionWarnings)!=0:
+                for item in inteructionWarnings:
+                    
+                  try:
+                        c.execute('INSERT INTO inteructionWarnings (drugAName, drugARxcui, drugBName, drugBRxcui) VALUES (?, ?, ?, ?)', (item[0], item[1], item[2], item[3]))
+                  except Exception :
+                      pass
+
         conn.commit()           
         conn.close()
+        
