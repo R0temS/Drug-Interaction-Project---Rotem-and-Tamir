@@ -96,7 +96,7 @@ def updatedrugsinfodic(drugsinfodic, druglist):
         getInfo(drug[1],"r",drugsinfodic, drug[0], loc, "")
         loc=len(drugsinfodic['druginfo'])
     ##drugsinfodic updated
-    updateDB("", drugsinfodic, "", "", "druginfo")
+    updateDB("", drugsinfodic, "", "", "","druginfo")
 
 def findLocationInDrugsInfoDic(druglist, drugsInfoDic, drugfordelete):
     rxcui = druglist[drugfordelete][1]
