@@ -22,10 +22,11 @@ def submit(finalList, chooseDrugsWindow, window, mode, warningList, listbox, eve
     for index in listbox.curselection():
         #finalList.append(re.search("^The.*Spain$", (listbox.get(index)), listbox.get(index)[-7:]))
         finalList.append([re.search(".*!", (listbox.get(index))).group()[:-1], re.search("!.*", (listbox.get(index))).group()[2:]])
+  
     chooseDrugsWindow.destroy()
+    loading(event)
    
-    loading_thread = threading.Thread(target= lambda: loading(event), daemon=True) # loading
-    loading_thread.start()  # loading
+    
     drugInteraction(finalList, window, "print", warningList)
     
    
