@@ -1,108 +1,157 @@
-from ast import Try
-import requests as req
-import os
-from tkinter import *
-from tkinter import messagebox
-from updateDB import *
+# 17/12 - added to both functions the interactionWarnings list to update and retrieve information from
+import sqlite3
 
-#searchDrug function checks if a drug exists in the Api and adds it to the drug list
-#checkforduplicate function checks if a specific drug is already exist in the druglist, if so it returns True, else it returns False
-def searchDrug(druglist):
-    def skip():
-        drugWindow.destroy()
-        ## need to add update hisory function
-    def drugOptions():
-        try:
-            optionsWindow.destroy()
-        except Exception:
-            pass
-        def choiceFun(loc, i):
-            if checkforduplicate(i['conceptProperties'][loc]['rxcui'], druglist) == False:
-                ##function of recieving the perday perweek
-                druglist.append([i['conceptProperties'][loc]['name'],i['conceptProperties'][loc]['rxcui'], "perday", "perweek"])
-            else:
-                messagebox.showinfo(title="Attention",message="Drug already exists!")
-            optionsWindow.destroy()
-            searchDrug(druglist)
-        drugSearch = entry.get().lower()
-        if drugSearch == "":
-            messagebox.showerror(title="entry error",message="Insert a drug name first!")
-        else:
-             str = "https://rxnav.nlm.nih.gov/REST/drugs.json?name=" + drugSearch
-             try:
-                 data = req.get(str).json()
-             except Exception:
-                 messagebox.showerror(title="Search alert",message="COULD NOT CONNECT, CHECK YOUR INTERNET CONNECTION!")
-                 return
-             
+#this function receives the information from the DB and updates the variables  
+def getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs, inteructionWarnings):
+    conn = sqlite3.connect('patient_info.db')
+    c = conn.cursor()
+
+    #druglist
+    c.execute('SELECT drugname FROM drugList')
+    drugname = c.fetchall()
+    c.execute('SELECT drugrxcui FROM drugList')
+    drugrxcui = c.fetchall()
+    c.execute('SELECT perweek FROM drugList')
+    perweek = c.fetchall()
+    c.execute('SELECT perday FROM drugList')
+    perday = c.fetchall()
+
+    for drugname, drugrxcui, perweek, perday in zip (drugname, drugrxcui, perweek, perday):
+        druglist.append([str(drugname)[2:-3], str(drugrxcui)[2:-3], str(perweek)[2:-3], str(perday)[2:-3]])
+
+    #history
+    c.execute('SELECT drugname FROM historyDrugs')
+    drugname = c.fetchall()
+    c.execute('SELECT drugrxcui FROM historyDrugs')
+    drugrxcui = c.fetchall()
+    c.execute('SELECT perweek FROM historyDrugs')
+    perweek = c.fetchall()
+    c.execute('SELECT perday FROM historyDrugs')
+    perday = c.fetchall()
+
+    for drugname, drugrxcui, perweek, perday in zip (drugname, drugrxcui, perweek, perday):
+        historyDrugs.append([str(drugname)[2:-3], str(drugrxcui)[2:-3], str(perweek)[2:-3], str(perday)[2:-3]])
+
+    #patient info
+    c.execute('SELECT firstName FROM info')
+    firstName = c.fetchall()
+    c.execute('SELECT lastName FROM info')
+    lastName = c.fetchall()
+    c.execute('SELECT age FROM info')
+    age = c.fetchall()
+    c.execute('SELECT bgilnesses FROM info')
+    bgilnesses = c.fetchall()
+    c.execute('SELECT allergies FROM info')
+    allergies = c.fetchall()
+   
+    patientInfo.update({'Allergies': [], 'Background Dieseases': []})
+    for firstName in firstName:
+        if str(firstName)[1:-2] != "None":
+            patientInfo.update({'firstName': str(firstName)[2:-3]})
+
+    for lastName in lastName:
+        if str(lastName)[1:-2] != "None":
+            patientInfo.update({'lastName': str(lastName)[2:-3]})
+
+    for age in age:
+        if str(age)[1:-2] != "None":
+            patientInfo.update({'Age': str(age)[2:-3]})
+
+    for bgilnesses in bgilnesses:
+        if str(bgilnesses)[1:-2] != "None":
+            patientInfo['Background Dieseases'].append(str(bgilnesses)[2:-3])
+
+    for allergies in allergies:
+        if str(allergies)[1:-2] != "None":
+            patientInfo['Allergies'].append(str(allergies)[2:-3])
+
+
+    #drugs information dic
     
-             if (len(data['drugGroup']) != 2):
-                 str = "https://rxnav.nlm.nih.gov/REST/spellingsuggestions.json?name=" + drugSearch
-                 data =req.get(str).json()
-                 if (len(data['suggestionGroup']['suggestionList']) != 0):
-                     drugSearch = data['suggestionGroup']['suggestionList']['suggestion'][len(data['suggestionGroup']['suggestionList']['suggestion'])-1]
-                     str = "https://rxnav.nlm.nih.gov/REST/drugs.json?name=" + drugSearch
-                     data = req.get(str).json()
-                 else:
-                     str = "https://rxnav.nlm.nih.gov/REST/drugs.json?name=" + drugSearch
-                     data = req.get(str).json()
-                     if (len(data['drugGroup']) != 2):
-                         messagebox.showinfo(title="Search alert",message="NO DATA FOUND!")
-             elif (len(data['drugGroup']) == 2):
-                 drugWindow.destroy()
-                 optionsWindow=Tk()
-                 optionsWindow.title("Drug Options")
-                 
-                 for i in data['drugGroup']['conceptGroup']:
+    c.execute('SELECT rxcui FROM drugsInfo')
+    rxcui = c.fetchall()
+    c.execute('SELECT drugName FROM drugsInfo')
+    drugName = c.fetchall()
+    c.execute('SELECT INDICATION_AND_USAGE FROM drugsInfo')
+    INDICATION_AND_USAGE = c.fetchall()
+    c.execute('SELECT WARNINGS FROM drugsInfo')
+    WARNINGS = c.fetchall()
+    c.execute('SELECT DOSAGE_AND_ADMINISTRATION FROM drugsInfo')
+    DOSAGE_AND_ADMINISTRATION = c.fetchall()
+
+    drugsInfoDic.update({"druginfo": []})
+    for rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION in zip (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION):
+        drugsInfoDic['druginfo'].append({"rxcui": str(rxcui)[2:-3], "drugName": str(drugName)[2:-3], "INDICATION AND USAGE": str(INDICATION_AND_USAGE)[2:-3], "WARNINGS": str(WARNINGS)[2:-3], "DOSAGE AND ADMINISTRATION": str(DOSAGE_AND_ADMINISTRATION)[2:-3]})
+    
+    #drug inteructions
+
+    c.execute('SELECT drugAName FROM inteructionWarnings')
+    drug1Name = c.fetchall()
+    c.execute('SELECT drugARxcui FROM inteructionWarnings')
+    drug1Rxcui = c.fetchall()
+    c.execute('SELECT drugBName FROM inteructionWarnings')
+    drug2Name = c.fetchall()
+    c.execute('SELECT drugBRxcui FROM inteructionWarnings')
+    drug2Rxcui = c.fetchall()
+
+    for drug1Name, drug1Rxcui, drug2Name, drug2Rxcui in zip (drug1Name, drug1Rxcui, drug2Name, drug2Rxcui):
+        inteructionWarnings.append([str(drug1Name)[2:-3], str(drug1Rxcui)[2:-3], str(drug2Name)[2:-3], str(drug2Rxcui)[2:-3]])
+    
+    conn.close()
+    
+
+def updateDB(druglist, drugsInfoDic, patientInfo, historyDrugs, inteructionWarnings, mode):
+        conn = sqlite3.connect('patient_info.db')
+        c = conn.cursor()
+       
+        if mode == "druglist":
+            c.execute('DELETE FROM druglist') #initializing the table values
+            
+            if len(druglist)!=0:
+                for drugname, drugrxcui, perday, perweek in druglist:
+                        c.execute('INSERT INTO drugList (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
+
+        if mode == "drughistory":
+            c.execute('DELETE FROM historyDrugs') #initializing the table values
+
+            if len(historyDrugs)!=0:
+                for drugname, drugrxcui, perday, perweek in historyDrugs:
+                        c.execute('INSERT INTO historyDrugs (drugname, drugrxcui, perweek, perday) VALUES (?, ?, ?, ?)', (drugname, drugrxcui, perweek, perday))
         
-                     if (len(i) >1):#(i['tty'] == 'SBD' and 
-                        def on_frame_configure(event):
-                            canvas.configure(scrollregion=canvas.bbox("all"))
-                        def on_canvas_scroll(event):
-                            canvas.yview_scroll(int(-1 * (event.delta / 60)), "units")
-                        count = 1
-                        optionsWindow.configure(bg='white')
-                        headline=Label(optionsWindow, text=f"Options available for {drugSearch}:", font=('Ariel',40,'bold'), bg='white')
-                        headline.grid(row=0, column=0)
-                        canvas=Canvas(background='white', width=1200)
-                        frame=Frame(canvas, bg='white', width=1200)
-                        canvas.create_window((150,50), window=frame, anchor="n")
-                        canvas.bind_all("<MouseWheel>", on_canvas_scroll)
-                        frame.bind("<Configure>", on_frame_configure)
-                        canvas.bind("<Configure>", on_frame_configure)
-                        canvas.grid(row=1, column=0)
-                        for j in i['conceptProperties']:
-                             btn=Button(frame,
-                                       text=f"{count}. {j['name']}  rxcui - {j['rxcui']}",
-                                      command=lambda count=count-1, i=i: choiceFun(count,i), 
-                                      anchor='e', font=("Comic Sans", 12),
-                                        fg="White",
-                                     background="#20A5C9",
-                                        activebackground="#20A5C1",
-                                     activeforeground="White",)
-                             btn.grid(padx=20,pady=5, row=count, column=0)
-                             
-                             count +=1
-                        canvas.configure()
-                 optionsWindow.mainloop()
+        if mode == "patientinfo":
+            c.execute('DELETE FROM info') #initializing the table values
+            c.execute('INSERT INTO info (firstName, lastName, age) VALUES (?, ?, ?)', ( patientInfo['firstName'], patientInfo['lastName'], patientInfo['Age']))
+            if len(patientInfo['Allergies'])!=0:
+                for allergy in patientInfo['Allergies']:
+                    c.execute('INSERT INTO info (allergies) VALUES (?)', (allergy, ))
+           
+            
+            if len(patientInfo['Background Dieseases'])!=0:
+                for bgilnesses in patientInfo['Background Dieseases']:
+                    c.execute('INSERT INTO info (bgilnesses) VALUES (?)', (bgilnesses, ))
+            
+            
+         
+        if mode == "druginfo":
+            c.execute('DELETE FROM drugsInfo') #initializing the table values
+            if len(drugsInfoDic['druginfo'])!=0:
+                for item in drugsInfoDic['druginfo']:
+                    
+                  try:
+                        c.execute('INSERT INTO drugsInfo (rxcui, drugName, INDICATION_AND_USAGE, WARNINGS, DOSAGE_AND_ADMINISTRATION) VALUES (?, ?, ?, ?, ?)', (item['rxcui'], item['drugName'], item['INDICATION AND USAGE'], item['WARNINGS'], item['DOSAGE AND ADMINISTRATION']))
+                  except Exception :
+                      pass
+        
+        if mode == "inteructionWarnings":
+            c.execute('DELETE FROM inteructionWarnings') #initializing the table values
+            if len(inteructionWarnings)!=0:
+                for item in inteructionWarnings:
+                    
+                  try:
+                        c.execute('INSERT INTO inteructionWarnings (drugAName, drugARxcui, drugBName, drugBRxcui) VALUES (?, ?, ?, ?)', (item[0], item[1], item[2], item[3]))
+                  except Exception :
+                      pass
 
-             else:messagebox.showinfo(title="Search alert",message="NO DATA FOUND!")
-
-
-
-    drugWindow = Tk()
-    drugWindow.title("drug search")
-    drugWindow.config()
-    entry = Entry(drugWindow, font=("Ariel", 30))
-    entry.pack(side=LEFT)
-    skipButton= Button(drugWindow, text="Continue", command=skip)
-    skipButton.pack(side=RIGHT)
-    searchButton = Button(drugWindow, text="Search", command=drugOptions)
-    searchButton.pack(side=RIGHT)
-    drugWindow.mainloop()
-
-def checkforduplicate(rxcui, druglist):
-    for drug in druglist:
-        if rxcui == drug[1]:
-            return True
-    return False
+        conn.commit()           
+        conn.close()
+        
