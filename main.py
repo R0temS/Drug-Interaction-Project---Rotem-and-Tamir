@@ -1,3 +1,5 @@
+#17.12 - i created a warning list and a table (there's a problem with the table creation)
+
 import os
 import requests as req
 from getInfofun import *
@@ -26,6 +28,7 @@ druglist = [] # a list of the drugs. item:[drug name, drug rxcui, perWeek, perDa
 drugsInfoDic={} # a dictionary containing information about the drugs. {"druginfo": [{"rxcui": ###, "drugName": ###, "INDICATION AND USAGE": ###, "WARNINGS": ###, "DOSAGE AND ADMINISTRATION": ###},...]}
 patientInfo={'Allergies': [], 'Background Dieseases': []} # a dictionary containing information about the patient. {'firstName': ###, 'lastName': ###, 'Age': ###, 'Allergies': [list of allergies], 'Background Dieseases': [list of background dieseases]}
 historyDrugs=[] # a list of the history of the used drugs. item:[drug name, drug rxcui, perWeek, perDay]
+inteructionWarnings = []  # a list of interuction warnings. item: [drug1Name, drug1Rxcui, drug2Name, drug2Rxcui]
 # DB creation
 
 try:
@@ -58,6 +61,12 @@ try:
                        perweek text,
                        perday text
                        )""")
+    c.execute("""CREATE TABLE inteructionWarnings(
+                       drugAName text,
+                       drugARxcui text,
+                       drugBName text,
+                       drugBRxcui text
+                       )""")
 
     # # Commit Changes
     conn.commit()
@@ -67,7 +76,7 @@ try:
     getPatientInfo(patientInfo, "", "", "", "")
 
 except Exception:
-    getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs)
+    getInfoFromDB(druglist, drugsInfoDic, patientInfo, historyDrugs, inteructionWarnings)
 
 while True:
-    mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo)
+    mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarnings)
