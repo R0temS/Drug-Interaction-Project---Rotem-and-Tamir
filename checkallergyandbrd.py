@@ -1,4 +1,3 @@
-import threading
 from tkinter import *
 from tkinter import messagebox
 import threading
@@ -157,36 +156,14 @@ def checkBackgroundDiesease(drugsInfoDic, patientInfo, window):
     except Exception:
         messagebox.showinfo(title="Alert",message="NO BACKGROUND DIESEASES IN THE LIST!")
 
+
+
+
+
+
 # Creating a thread of loading window
   
-def loading(event):
-   
-    def timer(event, Text):
-        count = 0
-        
-        while not event.is_set():
-            time.sleep(1)
-            if count == 0:
-                 Text.config(text="LOADING.")
-                 count += 1
-            elif count == 1:
-                 Text.config(text="LOADING..")
-                 count += 1
-            elif count == 2:
-                Text.config(text="LOADING...")
-                count = 0
-        
-        
-    
-    waitingWindow = Tk()
-    Text = Label(waitingWindow, text="LOADING",
-                     bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center')
-    Text.pack()
-    loading_thread = threading.Thread(target= lambda: timer(event, Text), daemon=True) # loading
-    loading_thread.start()  # loading
-    
-    waitingWindow.mainloop() 
-    
+
     
     
         

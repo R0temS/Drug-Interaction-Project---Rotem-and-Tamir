@@ -239,7 +239,7 @@ def clickSchedule (): # creates a new schedule for the user
     print("creates new schedule")
     
 def clickWarnings (allDrugs, window, mode, warningList): # shows the relevant warnings for the user
-    drugInteraction(allDrugs, window, "choose", warningList)
+    drugInteraction(allDrugs, window, "choose", warningList, "")
     
 def clickProfile (patientInfo): # shows the user profile
     reviewProfile(patientInfo) 
