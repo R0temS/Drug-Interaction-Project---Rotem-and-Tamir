@@ -160,6 +160,7 @@ def allergiesInsert(patientInfo, firstName, lastName, Age, info):
                      activebackground="#20A5C9",
                      activeforeground="White")
     addallergyBtn.grid(row=0, column=3, padx=10, ipadx=50)
+    allergyWindow.eval('tk::PlaceWindow . center')
     allergyWindow.mainloop()
                    
    
@@ -190,11 +191,6 @@ def getPatientInfo(patientInfo, firstname, lastname, age, allergywindow):
     Age = Entry(info, width=30)
     Age.insert(0, age)
     Age.grid(row=2, column=1, padx=20 )
-    #bgIlnesses = Entry(info, width=30)
-    #bgIlnesses.grid(row=4, column=1, padx=20 )
-    #allergies = Entry(info, width=30)
-    #allergies.grid(row=5, column=1, padx=20 )
-        
     
     # create text box lables
     firstNameL = Label(info, text = "First Name")
@@ -205,12 +201,6 @@ def getPatientInfo(patientInfo, firstname, lastname, age, allergywindow):
     
     ageL = Label(info, text = "Age")
     ageL.grid(row=2, column=0)
-    
-    #bgIlnessesL = Label(info, text = "Background Ilnesses")
-    #bgIlnessesL.grid(row=4, column=0)
-        
-    #allergiesL = Label(info, text = "Allergies")
-    #allergiesL.grid(row=5, column=0)
     
     
     #create submit button
@@ -225,7 +215,7 @@ def getPatientInfo(patientInfo, firstname, lastname, age, allergywindow):
     nextBtn.grid(row=6, column=0, columnspan=2, padx=10, ipadx=50)
     
     
-    
+    info.eval('tk::PlaceWindow . center')
     info.mainloop()
 
 
@@ -250,7 +240,10 @@ def reviewProfile(patientInfo):##!!!!!need to be taken from the patientInfo dict
     reviewInfo.configure(bg="white")
     headline=Label(reviewInfo, bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center', text="-----Patient Info-----")
     textbox = Label(reviewInfo, bg= 'white', font=('Ariel', 14), padx=20, pady=10, justify='left')
-    text=f"The information of {patientInfo['firstName']} {patientInfo['lastName']}:\n\nAge: {patientInfo['Age']}\n"
+    try:
+        text=f"The information of {patientInfo['firstName']} {patientInfo['lastName']}:\n\nAge: {patientInfo['Age']}\n"
+    except Exception:
+        text=f"The information of:\n\nAge: {patientInfo['Age']}\n"
     if len(patientInfo['Allergies'])!=0:
         text = text +"\nAllergies:\n"
         for allergy in patientInfo['Allergies']:
@@ -323,4 +316,5 @@ def reviewProfile(patientInfo):##!!!!!need to be taken from the patientInfo dict
                  pady=10, width=25)
     back.grid(row=3, column=1)
     
+    reviewInfo.eval('tk::PlaceWindow . center')
     reviewInfo.mainloop()
