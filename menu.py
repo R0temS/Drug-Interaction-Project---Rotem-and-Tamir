@@ -108,6 +108,7 @@ def showDrugList(druglist, historyDrugs, drugsInfoDic, window):
                         padx=10,
                         pady=10, width=25) 
         back.pack()
+        listWindow.eval('tk::PlaceWindow . center')
         listWindow.mainloop()
     else:
         messagebox.showerror(message = "Insert drugs first!", title= "alert")
@@ -200,7 +201,8 @@ def drugInfo(druglist, drugsInfodic, window, patientInfo):
         relevantallergy.grid(row=3, column=0)
         relevantbgillness.grid(row=3, column=1)
         back.grid(row=3, column=2)
-       
+        
+        listWindow.eval('tk::PlaceWindow . center')
         listWindow.mainloop()
     else:
         messagebox.showerror(message = "Insert drugs first!", title= "alert")
@@ -230,6 +232,7 @@ def clickHistory (historyDrugs): # opens a new window with the history details
                      activebackground="#20A5C9",
                      activeforeground="White")
         previewsBtn.grid(row=2, column=1, padx=10, ipadx=50, columnspan=2)
+        historyWindow.eval('tk::PlaceWindow . center')
         historyWindow.mainloop()
     else:
         messagebox.showerror(message = "No history found!", title= "attention")
@@ -254,11 +257,12 @@ def addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs, interuct
     searchDrug(druglist)
     updatedrugsinfodic(drugsInfoDic, druglist)
     updateDB(druglist, "", "", "", "","druglist")# updating the DB  
-    #z = threading.Thread(target=drugInteraction, args = (druglist, window, "update", inteructionWarnings, "") , daemon=True)
-    #z.start()
-    #mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarnings)
+    #z = threading.Thread(target=drugInteraction, args = (druglist, window, "update", inteructionWarnings, ""), daemon=True)
+    #z.start()   ##relevent when working on schedule
+    
            
 def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarnings):
+
     window = Tk()
     window.title("Drug Management System")
     window.geometry("1000x500")
@@ -426,7 +430,7 @@ def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarni
                            pady=10,
                            width=25)
     druginfo.grid(column=2 , row=3, columnspan=2)
-    
+    window.eval('tk::PlaceWindow . center')
     window.mainloop()
     
         

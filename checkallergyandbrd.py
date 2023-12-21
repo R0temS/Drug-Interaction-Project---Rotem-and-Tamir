@@ -83,6 +83,7 @@ def checkAllergy(drugsInfoDic, patientInfo, window):
                         pady=10, width=25) 
             back.grid(row=3, column=0)
             window.destroy()
+            infoWindow.eval('tk::PlaceWindow . center')
             infoWindow.mainloop()            
         else:
                 messagebox.showinfo(title="Alert",message="NO INFORMATION THAT IS RELEVANT TO ALLERGIES WAS FOUND")
@@ -150,6 +151,7 @@ def checkBackgroundDiesease(drugsInfoDic, patientInfo, window):
                         pady=10, width=25) 
             back.grid(row=3, column=0)
             window.destroy()
+            infoWindow.eval('tk::PlaceWindow . center')
             infoWindow.mainloop()            
         else:
                 messagebox.showinfo(title="Alert",message="NO INFORMATION THAT IS RELEVANT TO BACKGROUND DIESEASES WAS FOUND")

@@ -67,6 +67,7 @@ def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc, listWindow):
             back.grid(row=3, column=0)
 
             listWindow.destroy()
+            infoWindow.eval('tk::PlaceWindow . center')
             infoWindow.mainloop()
             
         
@@ -90,40 +91,38 @@ def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc, listWindow):
     else:
         if mode=="p":
             messagebox.showinfo(title='Alert', message="NO INFO FOUND!")
-            
+
+def timer(Text1, waitingWindow, druglist, drugsinfodic):
+    loc=0
+    count=0
+    for drug in druglist:
+        getInfo(drug[1],"r",drugsinfodic, drug[0], loc, "")
+        loc=len(drugsinfodic['druginfo'])
+
+        if count == 0:
+                Text1.config(text="LOADING.")
+                count += 1
+        elif count == 1:
+                Text1.config(text="LOADING..")
+                count += 1
+        elif count == 2:
+                Text1.config(text="LOADING...")
+                count = 0   
+        waitingWindow.update_idletasks()#######!!!!!!!!!!!IMPORTANT!!!!!!!!!!
+     ##drugsinfodic updated
+    updateDB("", drugsinfodic, "", "", "","druginfo")
+    waitingWindow.destroy()
 
 def updatedrugsinfodic(drugsinfodic, druglist):
     drugsinfodic.update({"druginfo": []})
-    def timer():
-        loc=0
-        count=0
-        for drug in druglist:
-            getInfo(drug[1],"r",drugsinfodic, drug[0], loc, "")
-            loc=len(drugsinfodic['druginfo'])
-
-            if count == 0:
-                    Text1.config(text="LOADING.")
-                    count += 1
-            elif count == 1:
-                    Text1.config(text="LOADING..")
-                    count += 1
-            elif count == 2:
-                    Text1.config(text="LOADING...")
-                    count = 0
-            
-        
-        ##drugsinfodic updated
-        updateDB("", drugsinfodic, "", "", "","druginfo")
-        
-    
+ 
     waitingWindow = Tk()
     
     Text1 = Label(waitingWindow, text="LOADING",
                         bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center')
     Text1.pack() 
-                       
-    y = threading.Thread(target=timer, args=(), daemon=True)
-    y.start()
+    waitingWindow.after(20, timer, Text1, waitingWindow, druglist, drugsinfodic)  
+    waitingWindow.eval('tk::PlaceWindow . center')
     waitingWindow.mainloop()
     
     

@@ -39,18 +39,23 @@ def drugInteraction(alldrugs, window, mode, warningList, event):
         listbox = Listbox(chooseDrugsWindow,
                             selectmode="multiple",
                             bg='white', 
-                            font=('Ariel', 18),
-                            width=12
+                            font=('Ariel', 14)
+                            
                             )
         listbox.pack()
         count = 1
         finalList = []
+        widthlst=[]
         for drug in alldrugs:
             listbox.insert(count, f"{drug[0]}! {drug[1]}") 
+            widthlst.append(len(f"{drug[0]}! {drug[1]}"))
             count += 1
         
         submitButton = Button(chooseDrugsWindow, text="submit", command=lambda: submit(finalList, chooseDrugsWindow, window, "", warningList, listbox))
-        submitButton.pack()     
+        submitButton.pack()
+        listbox.update_idletasks()
+        listbox.config(width= max(widthlst)-7)
+        chooseDrugsWindow.eval('tk::PlaceWindow . center')
         chooseDrugsWindow.mainloop() 
     if mode == "print":
             
@@ -66,6 +71,7 @@ def drugInteraction(alldrugs, window, mode, warningList, event):
                         for location1 in range(0, len(alldrugs)-1):
                                             
                             for location2 in range(0, len(alldrugs)):
+                                        adress = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
                                         adress = adress+alldrugs[location1][1]+"+"+alldrugs[location2][1]
                                         data = req.get(adress).json()
                                 
@@ -121,16 +127,20 @@ def drugInteraction(alldrugs, window, mode, warningList, event):
                                         pady=10, width=25) 
                             back.grid(row=3, column=0)
                             waitingWindow.destroy()
+                            infoWindow.eval('tk::PlaceWindow . center')
                             infoWindow.mainloop()     
                 
                 
                     waitingWindow = Tk()
+                    
                     Text1 = Label(waitingWindow, text="LOADING",
                                         bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center')
                     Text1.pack() 
                        
                     x = threading.Thread(target=printInteractions, args=(), daemon=True)
                     x.start()
+                    waitingWindow.eval('tk::PlaceWindow . center')
+                    
                     waitingWindow.mainloop()
                     
 
@@ -150,6 +160,7 @@ def drugInteraction(alldrugs, window, mode, warningList, event):
                     for location1 in range(0, len(alldrugs)-1):
                     
                         for location2 in range(0, len(alldrugs)):
+                                    adress = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
                                     adress = adress+alldrugs[location1][1]+"+"+alldrugs[location2][1]
                                     data = req.get(adress).json()
         
@@ -160,11 +171,14 @@ def drugInteraction(alldrugs, window, mode, warningList, event):
                                             for j in i['fullInteractionType'][0]['interactionPair']:
                                                 text =  "SEVERITY: " + j['severity']+"\n"+ "DESCRIPTION: "+ j['description']
                                                 if checkInteractionDup(interactionlist, text) == False:
-                                                    if(j['severity']!= 'N/A'):
+                                                    if(j['severity']!= 'N/'):
                                                         warningList.append([alldrugs[location1][0], alldrugs[location1][1], alldrugs[location2][0], alldrugs[location2][1]])
+                                                        
                                                     interactionlist.append(text)
-                                                   
-                    updateDB("", "", "", "", warningList, warningList)   # updating the DB                                     
+                    
+                    print(warningList)         
+                      
+                    
                          
                                       
                                          

@@ -64,13 +64,14 @@ def searchDrug(druglist):
                         optionsWindow.configure(bg='white')
                         headline=Label(optionsWindow, text=f"Options available for {drugSearch}:", font=('Ariel',40,'bold'), bg='white')
                         headline.grid(row=0, column=0)
-                        canvas=Canvas(background='white', width=1200)
-                        frame=Frame(canvas, bg='white', width=1200)
+                        canvas=Canvas(background='white', width=50)
+                        frame=Frame(canvas, bg='white', width=50)
                         canvas.create_window((150,50), window=frame, anchor="n")
                         canvas.bind_all("<MouseWheel>", on_canvas_scroll)
                         frame.bind("<Configure>", on_frame_configure)
                         canvas.bind("<Configure>", on_frame_configure)
                         canvas.grid(row=1, column=0)
+                        widthlst=[]
                         for j in i['conceptProperties']:
                              btn=Button(frame,
                                        text=f"{count}. {j['name']}  rxcui - {j['rxcui']}",
@@ -80,10 +81,15 @@ def searchDrug(druglist):
                                      background="#20A5C9",
                                         activebackground="#20A5C1",
                                      activeforeground="White",)
+                             widthlst.append(btn.winfo_reqwidth()+30)
                              btn.grid(padx=20,pady=5, row=count, column=0)
-                             
                              count +=1
-                        canvas.configure()
+                     
+                 optionsWindow.update_idletasks()
+                 canvas.configure(width=max(widthlst))
+                 frame.configure(width=max(widthlst))
+                 optionsWindow.geometry()
+                 optionsWindow.eval('tk::PlaceWindow . center')
                  optionsWindow.mainloop()
 
              else:messagebox.showinfo(title="Search alert",message="NO DATA FOUND!")
@@ -99,6 +105,7 @@ def searchDrug(druglist):
     skipButton.pack(side=RIGHT)
     searchButton = Button(drugWindow, text="Search", command=drugOptions)
     searchButton.pack(side=RIGHT)
+    drugWindow.eval('tk::PlaceWindow . center')
     drugWindow.mainloop()
 
 def checkforduplicate(rxcui, druglist):

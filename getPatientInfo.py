@@ -14,6 +14,7 @@ from re import T
 import requests as req
 from tkinter import *
 from tkinter import messagebox
+from updateDB import *
 
 def updatepatientInfo(patientInfo,firstName, lastName, Age, bgillnessWindow):
     #allergies and bg illnesses already updated
@@ -105,6 +106,7 @@ def bgillnessInsert(patientInfo,firstName, lastName, Age, allergyWindow):
                      activebackground="#20A5C9",
                      activeforeground="White")
     addillnessBtn.grid(row=0, column=3, padx=10, ipadx=50)
+    bgillnessWindow.eval('tk::PlaceWindow . center')
     bgillnessWindow.mainloop()
 
 
