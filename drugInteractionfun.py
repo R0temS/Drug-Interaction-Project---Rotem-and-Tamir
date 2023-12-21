@@ -22,62 +22,14 @@ def checkInteractionDup(interactionlist, text):
 
 def submit(finalList, chooseDrugsWindow, window, mode, warningList, listbox):
     for index in listbox.curselection():
-        #finalList.append(re.search("^The.*Spain$", (listbox.get(index)), listbox.get(index)[-7:]))
         finalList.append([re.search(".*!", (listbox.get(index))).group()[:-1], re.search("!.*", (listbox.get(index))).group()[2:]])
     chooseDrugsWindow.destroy()
-    #event = threading.Event()
-    #loading_thread = threading.Thread(target=loading, args=(event,)) # loading
-    #loading_thread.start()
-    
-    # loading
     
     drugInteraction(finalList, window, "print", warningList, "")
-    #event.set()
-    
-    
-    
-    
-#def loading(event):
-#    def timer(window, Text, event: Event):
-#        count = 0
-    
-#        while not event.is_set():
-#            print(threading.active_count())
-#            time.sleep(1)
-#            if count == 0:
-#                    Text.config(text="LOADING.")
-#                    count += 1
-#            elif count == 1:
-#                    Text.config(text="LOADING..")
-#                    count += 1
-#            elif count == 2:
-#                Text.config(text="LOADING...")
-#                count = 0
-            
-#        window.destroy()
-
-#    waitingWindow = Tk()
-#    Text = Label(waitingWindow, text="LOADING",
-#                     bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center')
-#    Text.pack() 
-#    timer_thread = threading.Thread(target=timer, args=(waitingWindow, Text, event)) # loading
-#    timer_thread.start()
-#    waitingWindow.mainloop()
-
-
-     
-    
-#def textWindow(text1, oldWindow):
-#    try:
-#        oldWindow.destroy()
-#    except Exception:
-#        pass
-#    waitingWindow = Tk()
-#    Text = Label(waitingWindow, text=text1,
-#                        bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center')
-#    Text.pack() 
-#    waitingWindow.mainloop(n=1)
    
+    
+
+  
 def drugInteraction(alldrugs, window, mode, warningList, event):
     
     if mode == "choose":
@@ -136,11 +88,12 @@ def drugInteraction(alldrugs, window, mode, warningList, event):
                                                 Text1.config(text="LOADING..")
                                                 count += 1
                                         elif count == 2:
-                                            Text1.config(text="LOADING...")
-                                            count = 0
+                                                Text1.config(text="LOADING...")
+                                                count = 0
                                                             
                         if (flag == False):
-                            messagebox.showerror(title="no interactions found", message="No interactions found!")             
+                            messagebox.showerror(title="no interactions found", message="No interactions found!")    
+                            waitingWindow.destroy()
                         else:
                             #new window for showing interactions
                                                 
@@ -179,6 +132,7 @@ def drugInteraction(alldrugs, window, mode, warningList, event):
                     x = threading.Thread(target=printInteractions, args=(), daemon=True)
                     x.start()
                     waitingWindow.mainloop()
+                    
 
                                   
                                          
@@ -195,7 +149,7 @@ def drugInteraction(alldrugs, window, mode, warningList, event):
                    
                     for location1 in range(0, len(alldrugs)-1):
                     
-                        for location2 in range(location1+1, len(alldrugs)):
+                        for location2 in range(0, len(alldrugs)):
                                     adress = adress+alldrugs[location1][1]+"+"+alldrugs[location2][1]
                                     data = req.get(adress).json()
         

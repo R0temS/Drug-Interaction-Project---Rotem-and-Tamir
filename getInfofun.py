@@ -2,6 +2,8 @@ import requests
 from updateDB import *
 from tkinter import *
 from tkinter import messagebox
+import threading
+from asyncio import events
 #getInfo function:
 #mode "p":  prints basic info about a specific drug
 #mode "r":  updates the drugsInfoDic dictionary for a specific drug
@@ -91,12 +93,40 @@ def getInfo(drug_rxcui, mode, drugsinfodic, drugName, loc, listWindow):
             
 
 def updatedrugsinfodic(drugsinfodic, druglist):
-    loc=0
-    for drug in druglist:
-        getInfo(drug[1],"r",drugsinfodic, drug[0], loc, "")
-        loc=len(drugsinfodic['druginfo'])
-    ##drugsinfodic updated
-    updateDB("", drugsinfodic, "", "", "","druginfo")
+    drugsinfodic.update({"druginfo": []})
+    def timer():
+        loc=0
+        count=0
+        for drug in druglist:
+            getInfo(drug[1],"r",drugsinfodic, drug[0], loc, "")
+            loc=len(drugsinfodic['druginfo'])
+
+            if count == 0:
+                    Text1.config(text="LOADING.")
+                    count += 1
+            elif count == 1:
+                    Text1.config(text="LOADING..")
+                    count += 1
+            elif count == 2:
+                    Text1.config(text="LOADING...")
+                    count = 0
+            
+        
+        ##drugsinfodic updated
+        updateDB("", drugsinfodic, "", "", "","druginfo")
+        
+    
+    waitingWindow = Tk()
+    
+    Text1 = Label(waitingWindow, text="LOADING",
+                        bg= 'white', font=('Ariel', 18), padx=20, pady=10, justify='center')
+    Text1.pack() 
+                       
+    y = threading.Thread(target=timer, args=(), daemon=True)
+    y.start()
+    waitingWindow.mainloop()
+    
+    
 
 def findLocationInDrugsInfoDic(druglist, drugsInfoDic, drugfordelete):
     rxcui = druglist[drugfordelete][1]

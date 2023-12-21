@@ -48,11 +48,12 @@ def removeDrug(druglist, index, historyDrugs, listWindow, drugsInfoDic):
             druglist.pop(int(index)-1)
             if drugfordelete1!=-1:
                  drugsInfoDic['druginfo'].pop(drugfordelete1)
-            listWindow.destroy()
+            
             messagebox.showinfo(title='Success', message='DRUG REMOVED!')
             updateDB(druglist, "", "", "", "","druglist")  # updating the DB
             updateDB("", drugsInfoDic, "", "", "","druginfo")
             updateDB("", "", "", historyDrugs, "","drughistory")
+            listWindow.destroy()
         else:
             messagebox.showerror(title='Input error', message='CHOICE OUT OF RANGE!')
     else:
@@ -253,8 +254,9 @@ def addDrugs(druglist, window, drugsInfoDic, patientInfo, historyDrugs, interuct
     searchDrug(druglist)
     updatedrugsinfodic(drugsInfoDic, druglist)
     updateDB(druglist, "", "", "", "","druglist")# updating the DB  
-    
-    mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarnings)
+    #z = threading.Thread(target=drugInteraction, args = (druglist, window, "update", inteructionWarnings, "") , daemon=True)
+    #z.start()
+    #mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarnings)
            
 def mainMenu(historyDrugs, druglist, drugsInfoDic, patientInfo, inteructionWarnings):
     window = Tk()
